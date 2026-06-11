@@ -111,42 +111,59 @@ Abaixo está o detalhamento de como cada arquivo da camada de Modelo (`/src/mode
 **Módulo 1: Pessoas**
 * **5. `Organizador.java`** (extends Pessoa)
   * **Atributos:** `String setor`, `String nivelAcesso`
-  * **Métodos:** `exibirDadosPessoais()`, `public boolean aprovarEvento(Evento evento)` (Verifica o nível de acesso e altera o status do evento para "Aprovado").
+  * **Métodos Específicos:**
+    * `public void exibirDadosPessoais()`: Imprime no console uma ficha formatada (ex: `[ORGANIZADOR] Nome: X | CPF: Y | Setor: Z`).
+    * `public boolean aprovarEvento(Evento evento)`: Verifica se o `nivelAcesso` do organizador permite aprovação (ex: nível "Admin"). Se sim, altera o status do objeto `evento` para "Aprovado" e retorna `true`.
 * **6. `Participante.java`** (extends Pessoa implements Checkinavel)
   * **Atributos:** `String matricula`, `List<Inscricao> historicoInscricoes`
-  * **Métodos:** `exibirDadosPessoais()`, `realizarCheckin()` (Verifica o histórico de inscrições e valida a presença).
+  * **Métodos Específicos:**
+    * `public void exibirDadosPessoais()`: Imprime no console: `[PARTICIPANTE] Nome: X | Matrícula: Y | Total Inscrições: Z`.
+    * `public boolean realizarCheckin()`: Verifica se a lista `historicoInscricoes` possui alguma inscrição confirmada para a data atual. Se possuir, altera o status interno de presença e retorna `true`.
 
 **Módulo 2: Eventos**
 * **7. `EventoPresencial.java`** (extends Evento)
   * **Atributos:** `Local local`, `int capacidadeMaxima`
-  * **Métodos:** `iniciarEvento()` (Altera status e abre portas), `public boolean verificarLotacao()` (Checa capacidade vs inscrições).
+  * **Métodos Específicos:**
+    * `public void iniciarEvento()`: Altera o `status` (herdado) para "Em andamento" e imprime uma mensagem indicando a abertura das portas físicas do `local`.
+    * `public boolean verificarLotacao()`: Verifica se a quantidade atual de check-ins atingiu a `capacidadeMaxima`. Retorna `true` se o evento estiver lotado.
 * **8. `EventoOnline.java`** (extends Evento)
   * **Atributos:** `String linkAcesso`, `String plataforma`
-  * **Métodos:** `iniciarEvento()`, `public void enviarLinkAcesso()` (Simula o envio de links via console).
+  * **Métodos Específicos:**
+    * `public void iniciarEvento()`: Altera o `status` (herdado) para "Em andamento" e aciona o método `enviarLinkAcesso()`.
+    * `public void enviarLinkAcesso()`: Simula o envio de e-mails, imprimindo no console: `"Enviando link [linkAcesso] da plataforma [plataforma]"`.
 
 **Módulo 3: Estrutura**
 * **9. `Sessao.java`**
   * **Atributos:** `String id`, `String tema`, `String horarioInicio`, `String palestrante`, `Evento eventoVinculado`
-  * **Métodos:** `public void reagendarSessao(String novoHorario)` (Altera o horário e emite aviso).
+  * **Métodos Específicos:**
+    * `public void reagendarSessao(String novoHorario)`: Sobrescreve a variável `horarioInicio` com o `novoHorario` recebido e imprime um aviso de reagendamento.
 * **10. `Local.java`**
   * **Atributos:** `String id`, `String nome`, `String endereco`, `boolean possuiAcessibilidade`
-  * **Métodos:** `public boolean verificarDisponibilidadeData(String data)` (Retorna true se o local estiver livre).
+  * **Métodos Específicos:**
+    * `public boolean verificarDisponibilidadeData(String data)`: Checa internamente se a `data` passada já está ocupada. Se o local estiver livre, retorna `true`.
 
 **Módulo 4: Vínculos e Finanças**
 * **11. `Inscricao.java`**
   * **Atributos:** `String id`, `Participante participante`, `Sessao sessao`, `String dataInscricao`, `String status`
-  * **Métodos:** `public void confirmar()`, `public void cancelar()`.
+  * **Métodos Específicos:**
+    * `public void confirmar()`: Altera a variável `status` para "Confirmada". Deve ser acionado pelo Pagamento.
+    * `public void cancelar()`: Altera a variável `status` para "Cancelada", liberando a vaga na sessão.
 * **12. `Pagamento.java`**
   * **Atributos:** `String id`, `Inscricao inscricao`, `double valor`, `String metodoPagamento`, `boolean pago`
-  * **Métodos:** `public boolean processarPagamento()` (Muda pago para true e confirma a inscrição), `public boolean processarPagamento(String cupomDesconto)` (Aplica desconto antes de processar - Sobrecarga).
+  * **Métodos Específicos:**
+    * `public boolean processarPagamento()`: Valida se o `valor` > 0, altera o atributo `pago` para `true` e aciona `confirmar()` da inscrição.
+    * `public boolean processarPagamento(String cupomDesconto)`: (Sobrecarga) Verifica se o cupom é válido. Se for, deduz uma porcentagem do `valor` e em seguida aciona a validação padrão de pagamento.
 
 **Módulo 5: Finalização**
 * **13. `Categoria.java`**
   * **Atributos:** `String id`, `String nome`, `String descricao`
-  * **Métodos:** `public void atualizarDescricao(String novaDescricao)`.
+  * **Métodos Específicos:**
+    * `public void atualizarDescricao(String novaDescricao)`: Substitui o valor da variável `descricao` pela `novaDescricao`.
 * **14. `Certificado.java`**
   * **Atributos:** `String id`, `Participante participante`, `Evento evento`, `String dataEmissao`, `int cargaHoraria`
-  * **Métodos:** `public void emitir()` (Verifica check-in e término do evento para imprimir diploma), `public String gerarCodigoAutenticidade()` (Gera hash simples).
+  * **Métodos Específicos:**
+    * `public void emitir()`: Verifica se o `evento` está "Finalizado" e se o `participante` realizou check-in. Se sim, imprime o diploma formatado no console.
+    * `public String gerarCodigoAutenticidade()`: Cria e retorna um hash de validação simples (ex: concatenação do ID do evento com a matrícula do participante).
 
 ---
 
