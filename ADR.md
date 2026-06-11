@@ -1,6 +1,18 @@
 # Documento de Decisão de Arquitetura (ADR)
 **Projeto:** Sistema de Gestão de Eventos
 
+## Descrição e Objetivo do Projeto
+
+O **Sistema de Gestão de Eventos** é uma aplicação de linha de comando (CLI) desenvolvida em Java, criada para gerenciar de ponta a ponta o ciclo de vida de eventos acadêmicos, corporativos ou de entretenimento. 
+
+* **O que o sistema faz?**
+  Ele permite que organizadores estruturem eventos (físicos ou online), definam categorias, aloquem locais e criem cronogramas de sessões (palestras/atividades). Para os usuários, permite que participantes se cadastrem, realizem inscrições em sessões, processem pagamentos (com suporte a cupons de desconto), façam check-in de presença e, ao final, emitam certificados validados por um código de autenticidade.
+
+* **Qual o propósito técnico?**
+  Além de sua função de negócio, o projeto tem o objetivo acadêmico/técnico de demonstrar a aplicação rigorosa de **Programação Orientada a Objetos (POO)** — englobando herança, polimorfismo, interfaces e classes abstratas —, arquitetura estruturada em **MVC (Model-View-Controller)** e **persistência de dados local** utilizando arquivos de texto (`.txt` ou `.json`), sem o uso de banco de dados comercial.
+
+---
+
 Este documento define as diretrizes arquiteturais, a divisão de tarefas, a modelagem de dados e os padrões de engenharia que devem ser seguidos por toda a equipe (5 desenvolvedores) durante a construção do sistema.
 
 ## Parte 1: Visão Geral e Regras de Negócio
@@ -179,7 +191,7 @@ A documentação base fornece diretrizes para a estrutura de um sistema de event
   * **Atributos:** `Local local`, `int capacidadeMaxima`
   * **Métodos Específicos:**
     * `public void iniciarEvento()`: Altera o `status` (herdado) para "Em andamento" e imprime uma mensagem indicando a abertura das portas físicas do `local`.
-    * `public boolean verificarLotacao()`: Verifica se a quantidade atual de check-ins atingiu a `capacidadeMaxima`. Retorna `true` se o evento estiver lotado.
+    * `public boolean verificarLotacao() throws EventoLotadoException`: Verifica se a quantidade atual de inscrições/check-ins atingiu a `capacidadeMaxima`. Se estiver lotado, lança a exceção `EventoLotadoException`, impedindo novas inscrições. Retorna `false` caso ainda haja vagas.
 * **8. `EventoOnline.java`** (extends Evento)
   * **Atributos:** `String linkAcesso`, `String plataforma`
   * **Métodos Específicos:**
@@ -216,7 +228,7 @@ A documentação base fornece diretrizes para a estrutura de um sistema de event
 * **14. `Certificado.java`**
   * **Atributos:** `String id`, `Participante participante`, `Evento evento`, `String dataEmissao`, `int cargaHoraria`
   * **Métodos Específicos:**
-    * `public void emitir()`: Verifica se o `evento` está "Finalizado" e se o `participante` realizou check-in. Se sim, imprime o diploma formatado no console.
+    * `public void emitir() throws PagamentoPendenteException`: Verifica se o `evento` está "Finalizado" e se o `participante` realizou check-in. Também deve validar se a inscrição foi paga; se não, lança `PagamentoPendenteException`. Se tudo estiver válido, imprime o diploma formatado no console.
     * `public String gerarCodigoAutenticidade()`: Cria e retorna um hash de validação simples (ex: concatenação do ID do evento com a matrícula do participante).
 
 ## Parte 4: Regras para os Controllers
