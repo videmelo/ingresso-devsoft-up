@@ -355,3 +355,61 @@ Todos os 10 **Controllers** devem possuir a mesma estrutura base para garantir a
 6. `void carregarDadosArquivo()` *(Chamada à classe `ArquivoUtil` para preencher as coleções durante a inicialização do sistema)*
 
 *Observação:* Para manter os dados em memória durante a execução, cada Controller deve possuir uma **Coleção** (ex: `List<Participante> listaParticipantes = new ArrayList<>();`). As operações de CRUD modificam essa lista e, ao final, a coleção completa deve ser salva no arquivo.
+
+---
+
+## Estrutura do Menu de Navegação (CLI)
+
+Para garantir uma navegação fluida e lógica no terminal, o arquivo `MenuPrincipal.java` (na camada View) deve concentrar a interface primária com o usuário. Ao rodar a classe `Main.java`, o sistema deve carregar os dados dos arquivos (`carregarDadosArquivo()`) e exibir um menu iterativo em loop (`do-while` ou `while(true)`).
+
+Abaixo está o mapeamento de como o menu deve ser apresentado no console e quais ações cada opção deve desencadear nos Controllers.
+
+### Menu Principal
+Ao iniciar, o sistema exibe o seguinte layout:
+
+```text
+===================================================
+      SISTEMA DE GESTÃO DE EVENTOS - MENU
+===================================================
+1. Gerenciar Pessoas (Organizadores e Participantes)
+2. Gerenciar Eventos e Estrutura (Locais, Categorias, Sessões)
+3. Financeiro e Inscrições (Inscrições e Pagamentos)
+4. Execução do Evento (Check-in, Certificados, Relatórios)
+0. Salvar e Sair
+===================================================
+Escolha uma opção: 
+```
+
+### Detalhamento dos Submenus e Ações
+
+#### **Opção 1: Gerenciar Pessoas**
+Neste submenu, o foco é o cumprimento do **CRUD 1 (Pessoas)**.
+* **1.1. Cadastrar Novo Organizador:** Pede dados via `Scanner` e envia para `OrganizadorController.cadastrar()`.
+* **1.2. Cadastrar Novo Participante:** Pede dados (nome, CPF, matrícula) e envia para `ParticipanteController.cadastrar()`.
+* **1.3. Listar Todos os Usuários:** Chama a listagem de ambas as entidades.
+* **1.4. Atualizar Dados de Usuário:** Pede o ID/CPF, busca a entidade correspondente e permite editar as informações.
+* **1.5. Excluir Usuário:** Remove o usuário das listas em memória.
+
+#### **Opção 2: Gerenciar Eventos e Estrutura**
+Neste submenu, o foco é o **CRUD 2 (Eventos e Sessões)**. 
+* **2.1. Cadastrar Categoria:** Define um tema (ex: TI, Design) via `CategoriaController`.
+* **2.2. Cadastrar Local (Físico):** Registra o espaço físico (nome, endereço, acessibilidade).
+* **2.3. Criar Evento:** O sistema pergunta se é "Presencial" ou "Online". Coleta os dados, vincula à Categoria (e ao Local, se físico), e cadastra com status "Agendado".
+* **2.4. Adicionar Sessão a um Evento:** Cria uma palestra/atividade (`Sessao`) e a vincula a um Evento existente.
+* **2.5. Listar Eventos Disponíveis:** Exibe todos os eventos cadastrados.
+
+#### **Opção 3: Financeiro e Inscrições**
+Neste submenu, o foco é o **CRUD 3 (Inscrições/Ingressos)**, fazendo o elo entre Participantes e Eventos/Sessões.
+* **3.1. Realizar Inscrição:** O sistema lista os Participantes e as Sessões. O usuário escolhe os respectivos IDs. O `InscricaoController` cria o registro com status "Pendente".
+* **3.2. Pagar Inscrição / Aplicar Desconto:** O sistema lista as inscrições "Pendentes". O usuário escolhe uma e aciona o `PagamentoController`. O sistema deve perguntar se existe um cupom de desconto (para validar o *Polimorfismo de sobrecarga*). Ao finalizar, muda o status da inscrição para "Confirmada".
+* **3.3. Cancelar Inscrição:** Busca pelo ID da inscrição e altera seu status para "Cancelada", liberando a vaga.
+
+#### **Opção 4: Execução do Evento**
+Opções utilizadas durante ou após a ocorrência do evento, acionando interfaces e regras de negócio avançadas.
+* **4.1. Aprovar e Iniciar Evento:** Pede o ID do evento. Chama a lógica do Organizador para "aprovar" e em seguida chama o método abstrato `iniciarEvento()` (que vai se comportar diferente se for Online ou Presencial), mudando o status para "Em andamento".
+* **4.2. Realizar Check-in:** Pede a matrícula do participante. Aciona o contrato da interface `Checkinavel` para validar a presença na sessão inscrita.
+* **4.3. Gerar Certificado:** Pede a matrícula do participante. Valida se o check-in foi realizado e se o evento consta como "Finalizado". Se sim, imprime o diploma na tela e gera o código de autenticidade.
+* **4.4. Gerar Relatório de Engajamento:** Chama o contrato `gerarRelatorio()` da interface `RelatorioGeravel` do Evento, imprimindo no console um balanço final (ex: total de inscritos, total de comparecimentos).
+
+#### **Opção 0: Salvar e Sair**
+* **Ação:** O sistema deve executar um laço (ou chamadas explícitas) nos 10 Controllers, acionando o método `salvarDadosArquivo()`. Isso garante que todo o estado em memória (listas atualizadas, pagamentos feitos, novos status) seja gravado de forma segura nos arquivos `.txt` ou `.json`. Em seguida, encerra a aplicação de forma limpa.
