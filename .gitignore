@@ -1,0 +1,20 @@
+*.class
+*.jar
+*.war
+*.ear
+
+# IDEs
+.idea/
+.vscode/
+*.iml
+*.iws
+
+# Diretórios de build
+target/
+bin/
+build/
+out/
+
+# Arquivos temporários do OS
+.DS_Store
+Thumbs.db

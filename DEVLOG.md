@@ -6,19 +6,18 @@ Este documento estabelece o fluxo de trabalho (Workflow) da equipe e acompanha o
 
 ---
 
-## FASE 1: Fundação do Projeto (Equipe)
+## FASE 1: Fundação do Projeto (Responsabilidade: Equipe)
 
 Um membro designado fará o setup inicial. Nenhum outro Dev deve começar a programar até que esta fase esteja concluída e mesclada na `main`. Isso garante que todos terão acesso às classes Abstratas e Utilitários base para trabalhar.
 
 - [x] Criar repositório no GitHub e adicionar os 5 colaboradores.
-- [ ] Criar o arquivo `.gitignore` (ignorar `.class`, `.idea`, `target`, etc).
-- [ ] Criar as pastas base do MVC: `/src/model`, `/src/view`, `/src/controller`, `/src/interfaces`, `/src/exceptions`, `/src/util`.
-- [ ] Criar arquivos base: `Pessoa.java` (Abstrata) e `Evento.java` (Abstrata).
-- [ ] Criar interfaces: `Checkinavel.java` e `RelatorioGeravel.java`.
-- [ ] Criar pacote de Exceções (`EventoLotadoException`, `PagamentoPendenteException`, etc).
-- [ ] Criar classes de suporte em `/util`: `ArquivoUtil.java` e `LogUtil.java` (configurada para `[DATA/HORA] - [NÍVEL] - [MENSAGEM]`).
-- [ ] Criar classe `Main.java` e o esqueleto vazio do `MenuPrincipal.java` (apenas com o layout do console desenhado).
-- [ ] Realizar o commit inicial na `main` e avisar a equipe: *"Fase 1 concluída, podem puxar a main e criar suas branches!"*
+- [x] Criar o arquivo `.gitignore` (ignorar `.class`, `.idea`, `target`, etc).
+- [x] Criar as pastas base do MVC: `/src/model`, `/src/view`, `/src/controller`, `/src/interfaces`, `/src/exceptions`, `/src/util`.
+- [x] Criar arquivos base: `Pessoa.java` (Abstrata) e `Evento.java` (Abstrata).
+- [x] Criar interfaces: `Checkinavel.java` e `RelatorioGeravel.java`.
+- [x] Criar pacote de Exceções (`EventoLotadoException`, `PagamentoPendenteException`, etc).
+- [x] Criar classes de suporte em `/util`: `ArquivoUtil.java` e `LogUtil.java` (configurada para `[DATA/HORA] - [NÍVEL] - [MENSAGEM]`).
+- [x] Criar classe `Main.java` e o esqueleto vazio do `MenuPrincipal.java` (apenas com o layout do console desenhado).
 
 ---
 
@@ -28,7 +27,7 @@ Antes de iniciar a Fase 2, a equipe deve preencher os nomes abaixo para oficiali
 
 | Código | Nome do Integrante | Módulo Assumido | Nome da Branch Sugerida |
 | --- | --- | --- | --- |
-| **DEV 1** | `[Preencher Nome]` | Pessoas | `feature/dev1-pessoas` |
+| **DEV 1** | `Vinicius` | Pessoas | `feature/dev1-pessoas` |
 | **DEV 2** | `[Preencher Nome]` | Eventos | `feature/dev2-eventos` |
 | **DEV 3** | `[Preencher Nome]` | Estrutura | `feature/dev3-estrutura` |
 | **DEV 4** | `[Preencher Nome]` | Finanças | `feature/dev4-financas` |
