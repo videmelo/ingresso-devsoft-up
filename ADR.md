@@ -160,105 +160,186 @@ Com essa árvore estruturada, o ambiente está preparado para o início da imple
 
 ## Modelagem das Classes, Atributos, Métodos e Contratos
 
-Abaixo está o detalhamento completo da modelagem das classes, estruturado como um dicionário de dados para orientar a implementação dos Modelos (Models), garantindo o cumprimento dos requisitos de Orientação a Objetos (Herança, Polimorfismo, Interfaces e Encapsulamento).
+Abaixo está o detalhamento de como cada arquivo da camada de Modelo (`/src/model/` e `/src/interfaces/`) deve ser implementado. Cada item abaixo representa **um arquivo .java independente**.
 
-> **Regra Geral para todas as classes:** Todos os atributos devem ser **privados** (encapsulamento), acessados por meio de métodos `get` e `set`. Todas as classes precisam de um construtor e de um método `toString()` sobrescrito para facilitar a exibição.
-
----
-
-### Contratos e Superclasses (Base do Sistema)
-
-**1. Interface `Checkinavel`**
-
-* **Método:** `boolean realizarCheckin()` - Contrato para validar a presença do usuário.
-
-**2. Interface `RelatorioGeravel`**
-
-* **Método:** `void gerarRelatorio()` - Contrato para exportar dados de engajamento do evento.
-
-**3. Classe Abstrata `Pessoa`**
-
-* **Atributos:** `String id`, `String nome`, `String cpf`, `String email`
-* **Métodos:** `abstract void exibirDadosPessoais()` (obriga as subclasses a implementarem).
-
-**4. Classe Abstrata `Evento` (implementa `RelatorioGeravel`)**
-
-* **Atributos:** `String id`, `String titulo`, `String data`, `String status` (ex: Agendado, Em andamento, Finalizado)
-* **Métodos:** `abstract void iniciarEvento()`, `void gerarRelatorio()` (implementação da interface).
+> **Regras Gerais Obrigatórias para as Classes de Modelo:**
+> 1. **Encapsulamento:** Todos os atributos devem ser definidos como `private`.
+> 2. **Acesso:** Para cada atributo, deve ser criado um método `public [Tipo] getNomeDoAtributo()` e um `public void setNomeDoAtributo([Tipo] parametro)`.
+> 3. **Construtores:** Toda classe concreta deve ter pelo menos um construtor público que inicializa seus atributos.
+> 4. **Exibição:** Toda classe deve sobrescrever o método `public String toString()` para retornar uma representação em texto dos dados da classe.
 
 ---
 
-### Modelagem por Entidade
+### Contratos e Superclasses (Arquivos Base do Sistema)
 
-#### **Módulo 1 (Foco: Pessoas e Herança)**
+#### 1. Arquivo: `Checkinavel.java` (Interface)
+* **Local:** `/src/interfaces/Checkinavel.java`
+* **Propósito:** Contrato para entidades que necessitam de validação de presença.
+* **Conteúdo Obrigatório:**
+  * `public boolean realizarCheckin();`
+    * **O que deve fazer:** Deve verificar se o check-in é válido (ex: se a data atual corresponde à data do evento ou se o participante possui inscrição confirmada). Retorna `true` se o check-in for bem-sucedido e altera o status interno de presença, e `false` caso contrário.
 
-**5. `Organizador` (extends `Pessoa`)**
+#### 2. Arquivo: `RelatorioGeravel.java` (Interface)
+* **Local:** `/src/interfaces/RelatorioGeravel.java`
+* **Propósito:** Contrato para entidades que podem gerar dados estatísticos ou de engajamento.
+* **Conteúdo Obrigatório:**
+  * `public void gerarRelatorio();`
+    * **O que deve fazer:** Deve realizar a leitura dos dados consolidados da entidade (como total de inscritos, total de check-ins, receitas geradas) e formatar um texto para ser impresso no console ou salvo em um arquivo txt.
 
-* **Atributos Específicos:** `String setor`, `String nivelAcesso`
-* **Métodos Específicos:**
-* `void exibirDadosPessoais()` *(Polimorfismo de sobrescrita: exibe os dados no formato de organizador).*
-* `boolean aprovarEvento(Evento evento)`
+#### 3. Arquivo: `Pessoa.java` (Classe Abstrata)
+* **Local:** `/src/model/Pessoa.java`
+* **Propósito:** Classe base que agrupa atributos comuns a todas as pessoas do sistema. Não deve ser instanciada diretamente.
+* **Atributos (`private`):** `String id`, `String nome`, `String cpf`, `String email`
+* **Métodos Obrigatórios:**
+  * Construtor padrão e/ou construtor recebendo os atributos.
+  * Getters e Setters para todos os atributos.
+  * `public abstract void exibirDadosPessoais();`
+    * **O que deve fazer:** Por ser abstrato, não possui corpo aqui. Obriga que `Organizador` e `Participante` implementem como seus dados devem ser exibidos no console (usando `System.out.println`).
 
-**6. `Participante` (extends `Pessoa` implements `Checkinavel`)**
+#### 4. Arquivo: `Evento.java` (Classe Abstrata)
+* **Local:** `/src/model/Evento.java`
+* **Propósito:** Classe base para os tipos de eventos.
+* **Implementa:** `RelatorioGeravel` (`public abstract class Evento implements RelatorioGeravel`)
+* **Atributos (`private`):** `String id`, `String titulo`, `String data`, `String status` (ex: "Agendado", "Em andamento", "Finalizado")
+* **Métodos Obrigatórios:**
+  * Construtor recebendo os atributos.
+  * Getters e Setters para todos os atributos.
+  * `public abstract void iniciarEvento();`
+    * **O que deve fazer:** Por ser abstrato, obriga as filhas a definirem o que significa "iniciar".
+  * `public void gerarRelatorio()`
+    * **O que deve fazer:** Implementa a interface. Deve exibir no console um resumo contendo o `titulo`, a `data` e o `status` atual do evento de forma amigável.
 
-* **Atributos Específicos:** `String matricula`, `List<Inscricao> historicoInscricoes`
-* **Métodos Específicos:**
-* `void exibirDadosPessoais()` *(Polimorfismo de sobrescrita: exibe os dados no formato de participante).*
-* `boolean realizarCheckin()` *(Implementação da interface).*
+---
 
-#### **Módulo 2 (Foco: Eventos e Herança)**
+### Modelagem por Entidade Concreta (Arquivos dos Modelos)
 
-**7. `EventoPresencial` (extends `Evento`)**
+#### **Módulo 1: Pessoas e Herança**
 
-* **Atributos Específicos:** `Local local`, `int capacidadeMaxima`
-* **Métodos Específicos:**
-* `void iniciarEvento()` *(Polimorfismo de sobrescrita: lógica para evento físico).*
-* `boolean verificarLotacao()`
+#### 5. Arquivo: `Organizador.java`
+* **Local:** `/src/model/Organizador.java`
+* **Herança:** `public class Organizador extends Pessoa`
+* **Atributos Específicos (`private`):** `String setor`, `String nivelAcesso`
+* **Métodos Obrigatórios:**
+  * Construtor invocando o `super(id, nome, cpf, email)` mais os atributos específicos.
+  * Getters e Setters para `setor` e `nivelAcesso`.
+  * `public void exibirDadosPessoais()`
+    * **O que deve fazer:** Imprime no console uma ficha formatada: `[ORGANIZADOR] Nome: X | CPF: Y | Setor: Z | Nível: W`.
+  * `public boolean aprovarEvento(Evento evento)`
+    * **O que deve fazer:** Verifica se o `nivelAcesso` do organizador permite aprovação (ex: nível "Admin"). Se sim, altera o status do objeto `evento` passado como parâmetro para "Aprovado" e retorna `true`.
+  * `public String toString()` sobrescrito.
 
-**8. `EventoOnline` (extends `Evento`)**
+#### 6. Arquivo: `Participante.java`
+* **Local:** `/src/model/Participante.java`
+* **Herança/Interface:** `public class Participante extends Pessoa implements Checkinavel`
+* **Atributos Específicos (`private`):** `String matricula`, `List<Inscricao> historicoInscricoes`
+* **Métodos Obrigatórios:**
+  * Construtor invocando o `super(...)` mais a inicialização da lista de inscrições.
+  * Getters e Setters para `matricula` e `historicoInscricoes`.
+  * `public void exibirDadosPessoais()`
+    * **O que deve fazer:** Imprime no console: `[PARTICIPANTE] Nome: X | Matrícula: Y | Total Inscrições: Z`.
+  * `public boolean realizarCheckin()`
+    * **O que deve fazer:** (Implementação da interface). Verifica se a lista `historicoInscricoes` possui alguma inscrição confirmada. Se possuir, valida o check-in e retorna `true`.
+  * `public String toString()` sobrescrito.
 
-* **Atributos Específicos:** `String linkAcesso`, `String plataforma` (ex: Zoom, Teams)
-* **Métodos Específicos:**
-* `void iniciarEvento()` *(Polimorfismo de sobrescrita: lógica para liberar o link).*
-* `void enviarLinkAcesso()`
+#### **Módulo 2: Eventos Físicos e Digitais**
 
-#### **Módulo 3 (Foco: Estrutura e Logística)**
+#### 7. Arquivo: `EventoPresencial.java`
+* **Local:** `/src/model/EventoPresencial.java`
+* **Herança:** `public class EventoPresencial extends Evento`
+* **Atributos Específicos (`private`):** `Local local`, `int capacidadeMaxima`
+* **Métodos Obrigatórios:**
+  * Construtor invocando `super(...)` mais atributos específicos.
+  * Getters e Setters.
+  * `public void iniciarEvento()`
+    * **O que deve fazer:** Altera o `status` (herdado) para "Em andamento" e imprime uma mensagem indicando a abertura das portas do `local` físico.
+  * `public boolean verificarLotacao()`
+    * **O que deve fazer:** Verifica se a quantidade atual de inscrições (ou check-ins) atingiu a `capacidadeMaxima`. Retorna `true` se o evento estiver lotado.
+  * `public String toString()` sobrescrito.
 
-**9. `Sessao`**
+#### 8. Arquivo: `EventoOnline.java`
+* **Local:** `/src/model/EventoOnline.java`
+* **Herança:** `public class EventoOnline extends Evento`
+* **Atributos Específicos (`private`):** `String linkAcesso`, `String plataforma` (ex: Zoom, Teams)
+* **Métodos Obrigatórios:**
+  * Construtor invocando `super(...)` mais atributos específicos.
+  * Getters e Setters.
+  * `public void iniciarEvento()`
+    * **O que deve fazer:** Altera o `status` (herdado) para "Em andamento" e chama o método `enviarLinkAcesso()`.
+  * `public void enviarLinkAcesso()`
+    * **O que deve fazer:** Simula o envio de e-mails, imprimindo no console: `"Enviando link [linkAcesso] da plataforma [plataforma] para os participantes"`.
+  * `public String toString()` sobrescrito.
 
-* **Atributos Específicos:** `String id`, `String tema`, `String horarioInicio`, `String palestrante`, `Evento eventoVinculado`
-* **Métodos Específicos:** `void reagendarSessao(String novoHorario)`
+#### **Módulo 3: Logística e Estrutura**
 
-**10. `Local`**
+#### 9. Arquivo: `Sessao.java`
+* **Local:** `/src/model/Sessao.java`
+* **Atributos (`private`):** `String id`, `String tema`, `String horarioInicio`, `String palestrante`, `Evento eventoVinculado`
+* **Métodos Obrigatórios:**
+  * Construtor completo.
+  * Getters e Setters.
+  * `public void reagendarSessao(String novoHorario)`
+    * **O que deve fazer:** Sobrescreve a variável `horarioInicio` com o `novoHorario` recebido. Adicionalmente, pode imprimir no console um aviso do reagendamento.
+  * `public String toString()` sobrescrito.
 
-* **Atributos Específicos:** `String id`, `String nome`, `String endereco`, `boolean possuiAcessibilidade`
-* **Métodos Específicos:** `boolean verificarDisponibilidadeData(String data)`
+#### 10. Arquivo: `Local.java`
+* **Local:** `/src/model/Local.java`
+* **Atributos (`private`):** `String id`, `String nome`, `String endereco`, `boolean possuiAcessibilidade`
+* **Métodos Obrigatórios:**
+  * Construtor completo.
+  * Getters e Setters.
+  * `public boolean verificarDisponibilidadeData(String data)`
+    * **O que deve fazer:** (Neste MVP simples): Pode checar internamente se a `data` passada já está ocupada no escopo desse local. Se o local estiver livre, retorna `true`.
+  * `public String toString()` sobrescrito.
 
-#### **Módulo 4 (Foco: Associação e Financeiro)**
+#### **Módulo 4: Vínculos e Finanças**
 
-**11. `Inscricao`**
+#### 11. Arquivo: `Inscricao.java`
+* **Local:** `/src/model/Inscricao.java`
+* **Atributos (`private`):** `String id`, `Participante participante`, `Sessao sessao`, `String dataInscricao`, `String status` (ex: Pendente, Confirmada, Cancelada)
+* **Métodos Obrigatórios:**
+  * Construtor completo.
+  * Getters e Setters.
+  * `public void confirmar()`
+    * **O que deve fazer:** Altera a variável `status` para "Confirmada". Pode ser chamado pelo Pagamento após este ser processado.
+  * `public void cancelar()`
+    * **O que deve fazer:** Altera a variável `status` para "Cancelada". Libera a vaga na sessão.
+  * `public String toString()` sobrescrito.
 
-* **Atributos Específicos:** `String id`, `Participante participante`, `Sessao sessao`, `String dataInscricao`, `String status` (ex: Pendente, Confirmada, Cancelada)
-* **Métodos Específicos:** `void confirmar()`, `void cancelar()`
+#### 12. Arquivo: `Pagamento.java`
+* **Local:** `/src/model/Pagamento.java`
+* **Atributos (`private`):** `String id`, `Inscricao inscricao`, `double valor`, `String metodoPagamento`, `boolean pago`
+* **Métodos Obrigatórios:**
+  * Construtor completo.
+  * Getters e Setters.
+  * `public boolean processarPagamento()`
+    * **O que deve fazer:** Valida se o valor é maior que zero. Altera o atributo `pago` para `true` e chama o método `confirmar()` do objeto `inscricao`. Retorna `true` se tudo ocorrer bem.
+  * `public boolean processarPagamento(String cupomDesconto)`
+    * **O que deve fazer:** (Polimorfismo de sobrecarga). Verifica se o `cupomDesconto` é válido (ex: "DESC10"). Se for, reduz 10% da variável `valor`, imprime a aplicação do desconto no console e chama `processarPagamento()`.
+  * `public String toString()` sobrescrito.
 
-**12. `Pagamento`**
+#### **Módulo 5: Classificação e Finalização**
 
-* **Atributos Específicos:** `String id`, `Inscricao inscricao`, `double valor`, `String metodoPagamento`, `boolean pago`
-* **Métodos Específicos:**
-* `boolean processarPagamento()`
-* `boolean processarPagamento(String cupomDesconto)` *(Polimorfismo de sobrecarga: mesmo método, parâmetros diferentes).*
+#### 13. Arquivo: `Categoria.java`
+* **Local:** `/src/model/Categoria.java`
+* **Atributos (`private`):** `String id`, `String nome` (ex: TI, Design, Negócios), `String descricao`
+* **Métodos Obrigatórios:**
+  * Construtor completo.
+  * Getters e Setters.
+  * `public void atualizarDescricao(String novaDescricao)`
+    * **O que deve fazer:** Simplesmente substitui o valor da variável `descricao` pela `novaDescricao`.
+  * `public String toString()` sobrescrito.
 
-#### **Módulo 5 (Foco: Classificação e Finalização)**
-
-**13. `Categoria`**
-
-* **Atributos Específicos:** `String id`, `String nome` (ex: TI, Design, Negócios), `String descricao`
-* **Métodos Específicos:** `void atualizarDescricao(String novaDescricao)`
-
-**14. `Certificado`**
-
-* **Atributos Específicos:** `String id`, `Participante participante`, `Evento evento`, `String dataEmissao`, `int cargaHoraria`
-* **Métodos Específicos:** `void emitir()`, `String gerarCodigoAutenticidade()`
+#### 14. Arquivo: `Certificado.java`
+* **Local:** `/src/model/Certificado.java`
+* **Atributos (`private`):** `String id`, `Participante participante`, `Evento evento`, `String dataEmissao`, `int cargaHoraria`
+* **Métodos Obrigatórios:**
+  * Construtor completo.
+  * Getters e Setters.
+  * `public void emitir()`
+    * **O que deve fazer:** Verifica se o evento associado já está com o status "Finalizado" e se o participante realizou check-in. Se sim, imprime no console o diploma formatado (Nome do Participante, Carga Horária, Evento).
+  * `public String gerarCodigoAutenticidade()`
+    * **O que deve fazer:** Cria e retorna um hash simples para validação. Pode ser a concatenação do `id` do evento com o `cpf` ou `matricula` do participante. Retorna a String gerada.
+  * `public String toString()` sobrescrito.
 
 ---
 
