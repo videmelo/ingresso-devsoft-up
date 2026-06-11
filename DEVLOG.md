@@ -1,60 +1,53 @@
-## To-Do List: Sistema de Gestão de Eventos
+# Diário de Bordo e Lista de Tarefas (DEVLOG)
 
-### 1. Configuração Inicial e Repositório
+Este documento acompanha o progresso das tarefas estabelecidas no Documento de Decisão de Arquitetura (`ADR.md`).
 
-* [X] Criar o repositório do projeto no GitHub.
-* [X] Adicionar os 5 membros da equipe como colaboradores no repositório.
-* [ ] Criar o arquivo `.gitignore` para não subir arquivos de compilação da IDE.
-* [ ] Criar a estrutura base de pacotes na IDE: `model`, `view`, `controller`, `interfaces` e `util`.
-* [ ] Criar as pastas físicas na raiz do projeto: `dados/` (para txt/json) e `logs/`.
+## 1. Configuração Inicial e Repositório
 
----
+- [x] Criar o repositório do projeto no GitHub.
+- [x] Adicionar os 5 desenvolvedores da equipe como colaboradores no repositório.
+- [ ] Criar o arquivo `.gitignore` para ignorar arquivos de compilação (ex: `.class`, `.idea/`, `target/`).
+- [ ] Criar a estrutura base de pacotes: `/src/model`, `/src/view`, `/src/controller`, `/src/interfaces`, `/src/exceptions` e `/src/util`.
+- [ ] Criar os diretórios físicos na raiz do projeto: `dados/` (para armazenamento) e `logs/`.
 
-### 2. Divisão de Responsabilidades (2 MVCs por Integrante)
+## 2. Divisão de Responsabilidades (10 MVCs)
 
-Cada membro ficará responsável por desenvolver o Model, a View, o Controller e a persistência de dados das suas duas entidades, garantindo que não haja conflitos no código.
+Cada desenvolvedor é responsável por implementar toda a camada de Model, View e Controller (incluindo persistência em arquivo) de 2 entidades.
 
-| Integrante | MVC 1 (Model, View, Controller) | MVC 2 (Model, View, Controller) | Foco Principal da Tarefa |
+| Desenvolvedor | MVC 1 | MVC 2 | Foco Principal |
 | --- | --- | --- | --- |
-| **Membro 1** | `Organizador` | `Participante` | Gerenciamento de usuários e herança de `Pessoa`. |
-| **Membro 2** | `EventoPresencial` | `EventoOnline` | Criação de eventos e herança de `Evento`. |
-| **Membro 3** | `Sessao` | `Local` | Logística e infraestrutura física/grade do evento. |
-| **Membro 4** | `Inscricao` | `Pagamento` | Associação entre participante, evento e financeiro. |
-| **Membro 5** | `Categoria` | `Certificado` | Classificação dos eventos e geração de certificados. |
+| **Dev 1** | `Organizador` | `Participante` | Pessoas, herança da classe base `Pessoa` e interface `Checkinavel`. |
+| **Dev 2** | `EventoPresencial` | `EventoOnline` | Eventos físicos e digitais, herança de `Evento` e interface `RelatorioGeravel`. |
+| **Dev 3** | `Sessao` | `Local` | Estrutura de tempo e espaço dos eventos. |
+| **Dev 4** | `Inscricao` | `Pagamento` | Associação entre pessoas e eventos, polimorfismo de sobrecarga no pagamento. |
+| **Dev 5** | `Categoria` | `Certificado` | Classificação de eventos e emissão baseada em validação. |
 
----
+## 3. Modelagem Base e Contratos (Fundação)
 
-### 3. Modelagem Base e Contratos (Trabalho Conjunto ou Líder)
+- [ ] Implementar a interface `Checkinavel` e `RelatorioGeravel`.
+- [ ] Implementar a classe abstrata `Pessoa` e a classe abstrata `Evento` (implementando `RelatorioGeravel`).
+- [ ] Estabelecer os construtores, métodos `get/set` e a sobrescrita do método `toString()` em todas as 10 entidades concretas.
 
-* [ ] Criar a superclasse abstrata `Pessoa` (atributos comuns a organizadores e participantes).
-* [ ] Criar a superclasse abstrata `Evento` (atributos comuns a eventos presenciais e online).
-* [ ] Criar a interface `RelatorioGeravel` (com método para gerar estatísticas).
-* [ ] Criar a interface `Checkinavel` (com método para controle de presença).
-* [ ] Implementar a herança nas classes filhas (`Organizador` e `Participante` extends `Pessoa`; `EventoPresencial` e `EventoOnline` extends `Evento`).
+## 4. Implementação dos Controllers (CRUDs e Regras de Negócio)
 
----
+- [ ] **CRUD 1 (Pessoas):** Finalizar cadastro, listagem, atualização e exclusão em `OrganizadorController` e `ParticipanteController`.
+- [ ] **CRUD 2 (Eventos/Estrutura):** Finalizar métodos base e a lógica para aprovar eventos e vincular sessões aos eventos.
+- [ ] **CRUD 3 (Inscrições/Financeiro):** Finalizar a lógica de `InscricaoController` e `PagamentoController` (incluindo regra de descontos e alteração de status).
 
-### 4. Implementação dos 3 CRUDs Mínimos e Relacionamentos
+## 5. Persistência de Dados e Utilitários
 
-* [ ] **CRUD 1:** Finalizar métodos de Cadastrar, Alterar, Deletar e Listar Pessoas (Organizadores e Participantes).
-* [ ] **CRUD 2:** Finalizar métodos de Cadastrar, Alterar, Deletar e Listar Eventos e Sessões.
-* [ ] **CRUD 3:** Finalizar métodos de Cadastrar, Alterar, Deletar e Listar Inscrições.
-* [ ] Implementar a associação de coleções (Ex: `Map<Evento, List<Participante>>`).
+- [ ] Criar a classe `ArquivoUtil.java` para lidar com a gravação/leitura de arquivos `.txt` ou `.json`.
+- [ ] Implementar as chamadas `salvarDadosArquivo()` e `carregarDadosArquivo()` dentro de todos os 10 Controllers, utilizando listas em memória.
+- [ ] Criar a classe `LogUtil.java` formatando a saída obrigatoriamente como `[DATA/HORA] - [NÍVEL] - [MENSAGEM]`.
 
----
+## 6. Exceções e Padrões Avançados
 
-### 5. Utilitários e Persistência de Dados
+- [ ] Criar as exceções personalizadas (ex: `EntidadeNaoEncontradaException`, `EventoLotadoException`, `PagamentoPendenteException`).
+- [ ] Implementar blocos `try/catch` nas Views para tratamento de entrada inválida (ex: `InputMismatchException` no `Scanner`).
+- [ ] Integrar o registro de logs nas ações principais de sucesso (`[INFO]`), regras bloqueadas (`[WARN]`) e falhas técnicas (`[ERROR]`).
 
-* [ ] Criar a classe `ArquivoUtil.java` para salvar e ler os dados.
-* [ ] Implementar a persistência em `.txt` ou `.json` em todos os Controllers (garantir a regra da "barraquinha de cachorro quente").
-* [ ] Criar a classe `LogUtil.java` para registro de atividades.
-* [ ] Inserir chamadas de log sempre que um evento for criado, check-in for feito ou erro/exceção ocorrer.
+## 7. Interface Gráfica e Finalização
 
----
-
-### 6. Interface Gráfica e Finalização
-
-* [ ] Criar o `MenuPrincipal.java` para unificar a chamada das Views de todos os integrantes.
-* [ ] Validar o uso de estruturas de controle (`if`, `switch`) e laços (`for`, `while`) no código.
-* [ ] Realizar testes integrados (um membro testando a tela do outro).
-* [ ] Escrever o arquivo `README.md` com as instruções de como rodar o projeto e explicação sobre o uso de IA.
+- [ ] Desenvolver a classe `MenuPrincipal.java` contendo as 4 opções de navegação e a opção de salvar/sair (conforme mapa no `ADR.md`).
+- [ ] Validar a integração de todos os submenus nos respectivos Controllers.
+- [ ] Elaborar o arquivo `README.md` final com instruções de compilação, execução e créditos da equipe.
