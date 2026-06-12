@@ -28,7 +28,7 @@ Antes de iniciar a Fase 2, a equipe deve preencher os nomes abaixo para oficiali
 | Código | Nome do Integrante | Módulo Assumido | Nome da Branch Sugerida |
 | --- | --- | --- | --- |
 | **DEV 1** | `Vinicius` | Pessoas | `feature/dev1-pessoas` |
-| **DEV 2** | `[Preencher Nome]` | Eventos | `feature/dev2-eventos` |
+| **DEV 2** | `Guilherme` | Eventos | `feature/dev2-eventos` |
 | **DEV 3** | `[Preencher Nome]` | Estrutura | `feature/dev3-estrutura` |
 | **DEV 4** | `[Preencher Nome]` | Finanças | `feature/dev4-financas` |
 | **DEV 5** | `[Preencher Nome]` | Finalização | `feature/dev5-finalizacao` |
