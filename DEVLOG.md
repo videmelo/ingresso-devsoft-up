@@ -41,11 +41,11 @@ Cada Desenvolvedor deve criar sua branch (ex: `git checkout -b feature/dev1`) a 
 
 ### Tarefas do DEV 1 (Módulo Pessoas)
 *Entidades:* `Organizador` e `Participante`
-- [ ] **Model:** Criar as classes estendendo `Pessoa`.
-- [ ] **Model:** Implementar a interface `Checkinavel` no `Participante` (lógica de realizar check-in).
-- [ ] **Controller:** Criar `OrganizadorController` e `ParticipanteController` (Implementar o CRUD 1 completo e os métodos de ler/salvar arquivo).
-- [ ] **View:** Criar `OrganizadorView` e `ParticipanteView` contendo o Scanner para cadastrar, listar, atualizar e deletar.
-- [ ] **Integração Base:** Lidar com a exceção `EntidadeNaoEncontradaException` na busca do CRUD.
+- [x] **Model:** Criar as classes estendendo `Pessoa`.
+- [x] **Model:** Implementar a interface `Checkinavel` no `Participante` (lógica de realizar check-in).
+- [x] **Controller:** Criar `OrganizadorController` e `ParticipanteController` (Implementar o CRUD 1 completo e os métodos de ler/salvar arquivo).
+- [x] **View:** Criar `OrganizadorView` e `ParticipanteView` contendo o Scanner para cadastrar, listar, atualizar e deletar.
+- [x] **Integração Base:** Lidar com a exceção `EntidadeNaoEncontradaException` na busca do CRUD.
 
 ### Tarefas do DEV 2 (Módulo Eventos Físicos e Digitais)
 *Entidades:* `EventoPresencial` e `EventoOnline`
