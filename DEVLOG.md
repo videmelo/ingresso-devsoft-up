@@ -37,7 +37,7 @@ Antes de iniciar a Fase 2, a equipe deve preencher os nomes abaixo para oficiali
 
 ## FASE 2: Desenvolvimento Paralelo (Responsabilidade: Devs 1 a 5)
 
-Cada Desenvolvedor deve criar sua branch (ex: `git checkout -b feature/dev1`) a partir da `main` atualizada. A tarefa individual consiste em implementar **Model, View e Controller (incluindo leitura/gravação de TXT/JSON)** apenas para as suas 2 entidades.
+Cada Desenvolvedor deve criar sua branch (ex: `git checkout -b feature/dev1`) a partir da `main` atualizada. A tarefa individual consiste em implementar **Model, View e Controller (incluindo leitura/gravação de objetos em .dat)** apenas para as suas 2 entidades.
 
 ### Tarefas do DEV 1 (Módulo Pessoas)
 *Entidades:* `Organizador` e `Participante`
