@@ -16,16 +16,11 @@ public class MenuPrincipal {
     private OrganizadorView organizadorView;
     private ParticipanteView participanteView;
 
-    public MenuPrincipal() {
+    public MenuPrincipal(OrganizadorController organizadorController, ParticipanteController participanteController) {
         this.scanner = new Scanner(System.in);
         
-        // Inicializando os controllers
-        this.organizadorController = new OrganizadorController();
-        this.participanteController = new ParticipanteController();
-        
-        // Carregando dados salvos
-        this.organizadorController.carregarDadosArquivo();
-        this.participanteController.carregarDadosArquivo();
+        this.organizadorController = organizadorController;
+        this.participanteController = participanteController;
 
         // Inicializando as views e passando os controllers
         this.organizadorView = new OrganizadorView(this.organizadorController);
