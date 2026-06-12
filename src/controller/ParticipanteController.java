@@ -9,7 +9,7 @@ import java.util.List;
 
 public class ParticipanteController {
     private List<Participante> listaParticipantes = new ArrayList<>();
-    private final String ARQUIVO_DADOS = "dados/participantes.txt";
+    private final String ARQUIVO_DADOS = "dados/participantes.dat";
 
     public void cadastrarParticipante(Participante obj) {
         listaParticipantes.add(obj);
@@ -43,23 +43,13 @@ public class ParticipanteController {
     }
 
     public void salvarDadosArquivo() {
-        List<String> linhas = new ArrayList<>();
-        for (Participante part : listaParticipantes) {
-            linhas.add(part.getId() + ";" + part.getNome() + ";" + part.getCpf() + ";" + part.getEmail() + ";" + part.getMatricula() + ";" + part.isPresente());
-        }
-        ArquivoUtil.salvarDadosTxt(linhas, ARQUIVO_DADOS);
+        ArquivoUtil.salvarDadosDat(listaParticipantes, ARQUIVO_DADOS);
     }
 
     public void carregarDadosArquivo() {
-        listaParticipantes.clear();
-        List<String> linhas = ArquivoUtil.carregarDadosTxt(ARQUIVO_DADOS);
-        for (String linha : linhas) {
-            String[] dados = linha.split(";");
-            if (dados.length == 6) {
-                Participante part = new Participante(dados[0], dados[1], dados[2], dados[3], dados[4]);
-                part.setPresente(Boolean.parseBoolean(dados[5]));
-                listaParticipantes.add(part);
-            }
+        List<Participante> dadosCarregados = ArquivoUtil.carregarDadosDat(ARQUIVO_DADOS);
+        if (dadosCarregados != null && !dadosCarregados.isEmpty()) {
+            this.listaParticipantes = dadosCarregados;
         }
     }
 }

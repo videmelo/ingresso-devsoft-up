@@ -1,6 +1,9 @@
 package model;
 
-public class Sessao {
+import java.io.Serializable;
+
+public class Sessao implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String id;
     private String tema;
     private String horarioInicio;

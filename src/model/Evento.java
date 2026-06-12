@@ -1,8 +1,10 @@
 package model;
 
 import interfaces.RelatorioGeravel;
+import java.io.Serializable;
 
-public abstract class Evento implements RelatorioGeravel {
+public abstract class Evento implements RelatorioGeravel, Serializable {
+    private static final long serialVersionUID = 1L;
     private String id;
     private String titulo;
     private String data;

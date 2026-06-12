@@ -132,6 +132,7 @@ A documentação base fornece diretrizes para a estrutura de um sistema de event
 > 2. **Acesso:** Para cada atributo, deve ser criado um método `public [Tipo] getNomeDoAtributo()` e um `public void setNomeDoAtributo([Tipo] parametro)`.
 > 3. **Construtores:** Toda classe concreta deve ter pelo menos um construtor público que inicializa seus atributos.
 > 4. **Exibição:** Toda classe deve sobrescrever o método `public String toString()` para retornar uma representação em texto dos dados da classe.
+> 5. **Serialização:** Para garantir que os objetos possam ser gravados em arquivos `.dat`, **todas as classes de Modelo devem implementar a interface `java.io.Serializable`**.
 
 ### 3.1. Contratos e Superclasses (Arquivos Base do Sistema)
 

@@ -9,7 +9,7 @@ import java.util.List;
 
 public class OrganizadorController {
     private List<Organizador> listaOrganizadores = new ArrayList<>();
-    private final String ARQUIVO_DADOS = "dados/organizadores.txt";
+    private final String ARQUIVO_DADOS = "dados/organizadores.dat";
 
     public void cadastrarOrganizador(Organizador obj) {
         listaOrganizadores.add(obj);
@@ -43,22 +43,13 @@ public class OrganizadorController {
     }
 
     public void salvarDadosArquivo() {
-        List<String> linhas = new ArrayList<>();
-        for (Organizador org : listaOrganizadores) {
-            linhas.add(org.getId() + ";" + org.getNome() + ";" + org.getCpf() + ";" + org.getEmail() + ";" + org.getSetor() + ";" + org.getNivelAcesso());
-        }
-        ArquivoUtil.salvarDadosTxt(linhas, ARQUIVO_DADOS);
+        ArquivoUtil.salvarDadosDat(listaOrganizadores, ARQUIVO_DADOS);
     }
 
     public void carregarDadosArquivo() {
-        listaOrganizadores.clear();
-        List<String> linhas = ArquivoUtil.carregarDadosTxt(ARQUIVO_DADOS);
-        for (String linha : linhas) {
-            String[] dados = linha.split(";");
-            if (dados.length == 6) {
-                Organizador org = new Organizador(dados[0], dados[1], dados[2], dados[3], dados[4], dados[5]);
-                listaOrganizadores.add(org);
-            }
+        List<Organizador> dadosCarregados = ArquivoUtil.carregarDadosDat(ARQUIVO_DADOS);
+        if (dadosCarregados != null && !dadosCarregados.isEmpty()) {
+            this.listaOrganizadores = dadosCarregados;
         }
     }
 }
