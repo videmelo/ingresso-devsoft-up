@@ -15,6 +15,10 @@ bin/
 build/
 out/
 
+# Dados gerados em tempo de execução
+dados/
+logs/
+
 # Arquivos temporários do OS
 .DS_Store
 Thumbs.db

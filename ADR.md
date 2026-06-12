@@ -132,6 +132,7 @@ A documentação base fornece diretrizes para a estrutura de um sistema de event
 > 2. **Acesso:** Para cada atributo, deve ser criado um método `public [Tipo] getNomeDoAtributo()` e um `public void setNomeDoAtributo([Tipo] parametro)`.
 > 3. **Construtores:** Toda classe concreta deve ter pelo menos um construtor público que inicializa seus atributos.
 > 4. **Exibição:** Toda classe deve sobrescrever o método `public String toString()` para retornar uma representação em texto dos dados da classe.
+> 5. **Serialização:** Para garantir que os objetos possam ser gravados em arquivos `.dat`, **todas as classes de Modelo devem implementar a interface `java.io.Serializable`**.
 
 ### 3.1. Contratos e Superclasses (Arquivos Base do Sistema)
 
@@ -333,8 +334,8 @@ O documento exige a gravação de logs (atividades e erros). Para que o arquivo 
 * **Níveis de Log Permitidos:**
   * `[INFO]`: Para ações de sucesso (ex: cadastros, aprovação de eventos).
   * `[WARN]`: Para ações de negócio bloqueadas (ex: tentativa de check-in inválida, evento lotado).
-  * `[ERROR]`: Para exceções técnicas e falhas de sistema (ex: falha ao ler o arquivo `.json`, variável nula).
+  * `[ERROR]`: Para exceções técnicas e falhas de sistema (ex: falha ao ler o arquivo `.dat`, variável nula).
 * **Exemplos práticos no arquivo:**
   * `[10/06/2026 14:30:15] - [INFO] - Novo Participante cadastrado: Joao Silva (Matricula: 202601)`
   * `[10/06/2026 15:45:00] - [WARN] - Tentativa de inscricao falhou: Evento ID 05 lotado.`
-  * `[10/06/2026 16:00:22] - [ERROR] - Falha ao carregar dadosArquivo(): Arquivo participantes.json nao encontrado.`
+  * `[10/06/2026 16:00:22] - [ERROR] - Falha ao carregar dadosArquivo(): Arquivo participantes.dat nao encontrado.`

@@ -1,3 +1,5 @@
+import controller.OrganizadorController;
+import controller.ParticipanteController;
 import view.MenuPrincipal;
 import util.LogUtil;
 import java.io.File;
@@ -9,9 +11,14 @@ public class Main {
 
         LogUtil.info("Sistema iniciado com sucesso.");
 
-        // TODO: Inicializar os Controllers e carregarDadosArquivo() aqui
+        // Inicializando os Controllers e carregarDadosArquivo()
+        OrganizadorController organizadorController = new OrganizadorController();
+        ParticipanteController participanteController = new ParticipanteController();
 
-        MenuPrincipal menu = new MenuPrincipal();
+        organizadorController.carregarDadosArquivo();
+        participanteController.carregarDadosArquivo();
+
+        MenuPrincipal menu = new MenuPrincipal(organizadorController, participanteController);
         menu.iniciar();
 
         LogUtil.info("Sistema encerrado.");
