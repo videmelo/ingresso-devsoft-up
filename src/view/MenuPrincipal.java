@@ -1,8 +1,12 @@
 package view;
 
+import controller.EventoPresencialController;
+import controller.EventoOnlineController;
 import controller.OrganizadorController;
 import controller.ParticipanteController;
 import exceptions.EntidadeNaoEncontradaException;
+import model.EventoOnline;
+import model.EventoPresencial;
 
 import java.util.Scanner;
 
@@ -10,20 +14,28 @@ public class MenuPrincipal {
     private Scanner scanner;
     
     // Controladores
+    private EventoPresencialController eventoPresencialController;
+    private EventoOnlineController eventoOnlineController;
     private OrganizadorController organizadorController;
     private ParticipanteController participanteController;
 
     // Views
+    private EventoPresencialView eventoPresencialView;
+    private EventoOnlineView eventoOnlineView;
     private OrganizadorView organizadorView;
     private ParticipanteView participanteView;
 
-    public MenuPrincipal(OrganizadorController organizadorController, ParticipanteController participanteController) {
+    public MenuPrincipal(OrganizadorController organizadorController, ParticipanteController participanteController, EventoOnlineController eventoOnlineController, EventoPresencialController eventoPresencialController) {
         this.scanner = new Scanner(System.in);
-        
+
+        this.eventoPresencialController = eventoPresencialController;
+        this.eventoOnlineController = eventoOnlineController;
         this.organizadorController = organizadorController;
         this.participanteController = participanteController;
 
         // Inicializando as views e passando os controllers
+        this.eventoPresencialView = new EventoPresencialView(this.eventoPresencialController);
+        this.eventoOnlineView = new EventoOnlineView(this.eventoOnlineController);
         this.organizadorView = new OrganizadorView(this.organizadorController);
         this.participanteView = new ParticipanteView(this.participanteController);
     }
@@ -51,7 +63,7 @@ public class MenuPrincipal {
                         menuGerenciarPessoas();
                         break;
                     case 2:
-                        System.out.println("Módulo de Eventos em desenvolvimento...");
+                        menuGerenciarEventos();
                         break;
                     case 3:
                         System.out.println("Módulo Financeiro em desenvolvimento...");
@@ -63,6 +75,8 @@ public class MenuPrincipal {
                         System.out.println("Salvando dados...");
                         organizadorController.salvarDadosArquivo();
                         participanteController.salvarDadosArquivo();
+                        eventoOnlineController.salvarDadosArquivo();
+                        eventoPresencialController.salvarDadosArquivo();
                         System.out.println("Sistema encerrado.");
                         break;
                     default:
@@ -119,6 +133,38 @@ public class MenuPrincipal {
                         } else {
                             System.out.println("Erro: Usuário não encontrado.");
                         }
+                        break;
+                    case 0:
+                        System.out.println("Retornando...");
+                        break;
+                    default:
+                        System.out.println("Opção inválida.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Erro: Entrada inválida. Digite um número.");
+            }
+        } while (opcao != 0);
+    }
+
+    private void menuGerenciarEventos() {
+        int opcao = -1;
+        do {
+            System.out.println("\n--- GERENCIAR EVENTOS ---");
+            System.out.println("1. Menu de Evento Online");
+            System.out.println("2. Menu de Evento Presencial");
+            System.out.println("0. Voltar ao Menu Principal");
+            System.out.print("Escolha uma opção: ");
+
+            try {
+                String input = scanner.nextLine();
+                opcao = Integer.parseInt(input);
+
+                switch (opcao) {
+                    case 1:
+                        eventoOnlineView.exibirMenu();
+                        break;
+                    case 2:
+                        eventoPresencialView.exibirMenu();
                         break;
                     case 0:
                         System.out.println("Retornando...");
