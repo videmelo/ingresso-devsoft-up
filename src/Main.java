@@ -1,9 +1,4 @@
-import controller.OrganizadorController;
-import controller.ParticipanteController;
-import controller.EventoPresencialController;
-import controller.EventoOnlineController;
-import model.EventoPresencial;
-import view.EventoOnlineView;
+import controller.*;
 import view.MenuPrincipal;
 import util.LogUtil;
 import java.io.File;
@@ -14,20 +9,36 @@ public class Main {
         new File("logs").mkdirs();
 
         LogUtil.info("Sistema iniciado com sucesso.");
-
-        // Inicializando os Controllers e carregarDadosArquivo()
+        
         OrganizadorController organizadorController = new OrganizadorController();
         ParticipanteController participanteController = new ParticipanteController();
         EventoOnlineController eventoOnlineController = new EventoOnlineController();
         EventoPresencialController eventoPresencialController = new EventoPresencialController();
+        LocalController localController = new LocalController();
+        SessaoController sessaoController = new SessaoController();
+        CategoriaController categoriaController = new CategoriaController();
+        InscricaoController inscricaoController = new InscricaoController();
+        PagamentoController pagamentoController = new PagamentoController();
+        CertificadoController certificadoController = new CertificadoController();
 
         organizadorController.carregarDadosArquivo();
         participanteController.carregarDadosArquivo();
         eventoOnlineController.carregarDadosArquivo();
         eventoPresencialController.carregarDadosArquivo();
+        localController.carregarDadosArquivo();
+        sessaoController.carregarDadosArquivo();
+        categoriaController.carregarDadosArquivo();
+        inscricaoController.carregarDadosArquivo();
+        pagamentoController.carregarDadosArquivo();
+        certificadoController.carregarDadosArquivo();
 
-
-        MenuPrincipal menu = new MenuPrincipal(organizadorController, participanteController, eventoOnlineController, eventoPresencialController);
+        MenuPrincipal menu = new MenuPrincipal(
+            organizadorController, participanteController, 
+            eventoOnlineController, eventoPresencialController,
+            localController, sessaoController,
+            categoriaController, inscricaoController,
+            pagamentoController, certificadoController
+        );
         menu.iniciar();
 
         LogUtil.info("Sistema encerrado.");
