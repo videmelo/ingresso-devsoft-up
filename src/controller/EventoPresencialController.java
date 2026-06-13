@@ -14,7 +14,6 @@ public class EventoPresencialController {
     private static final String ARQUIVO = "dados/eventos_presenciais.dat";
     private List<EventoPresencial> listaEventos = new ArrayList<>();
 
-    // ─── CRUD ────────────────────────────────────────────────────────────────
 
     public void cadastrarEvento(EventoPresencial evento) {
         listaEventos.add(evento);
@@ -60,7 +59,6 @@ public class EventoPresencialController {
         return removido;
     }
 
-    // ─── Ações de negócio ────────────────────────────────────────────────────
 
     public void iniciarEvento(String id) throws EntidadeNaoEncontradaException {
         EventoPresencial evento = buscarPorId(id);
@@ -80,7 +78,6 @@ public class EventoPresencialController {
         evento.gerarRelatorio();
     }
 
-    // ─── Persistência ────────────────────────────────────────────────────────
 
     public void salvarDadosArquivo() {
         ArquivoUtil.salvarDadosDat(listaEventos, ARQUIVO);

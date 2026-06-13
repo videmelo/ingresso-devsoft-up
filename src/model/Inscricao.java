@@ -6,7 +6,6 @@ public class Inscricao implements Serializable {
     private static final long serialVersionUID = 1L;
     private String id;
     private Participante participante;
-    // Utilizando Object ou criando um mock de Sessao. Vamos criar mock.
     private Sessao sessao;
     private String dataInscricao;
     private String status;
@@ -36,5 +35,10 @@ public class Inscricao implements Serializable {
 
     public void cancelar() {
         this.status = "Cancelada";
+    }
+
+    @Override
+    public String toString() {
+        return "[INSCRIÇÃO] ID: " + id + " | Participante: " + participante.getNome() + " | Sessão: " + sessao.getTema() + " | Status: " + status;
     }
 }

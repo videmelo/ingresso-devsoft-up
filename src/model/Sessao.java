@@ -33,4 +33,9 @@ public class Sessao implements Serializable {
         this.horarioInicio = novoHorario;
         System.out.println("Sessão " + this.id + " reagendada para " + novoHorario);
     }
+
+    @Override
+    public String toString() {
+        return "[SESSÃO] ID: " + id + " | Tema: " + tema + " | Horário: " + horarioInicio + " | Palestrante: " + palestrante + (eventoVinculado != null ? " | Evento: " + eventoVinculado.getTitulo() : "");
+    }
 }
