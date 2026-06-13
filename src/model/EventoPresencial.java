@@ -1,0 +1,103 @@
+package model;
+
+import exceptions.EventoLotadoException;
+
+public class EventoPresencial extends Evento {
+
+    private String local;
+    private int capacidadeMaxima;
+    private int totalInscritos;
+
+    public EventoPresencial(String id, String titulo, String data, String local, int capacidadeMaxima) {
+        super(id, titulo, data, "Agendado");
+        this.local = local;
+        this.capacidadeMaxima = capacidadeMaxima;
+        this.totalInscritos = 0;
+    }
+
+    // Construtor completo para carregar do arquivo (inclui status e totalInscritos)
+    public EventoPresencial(String id, String titulo, String data, String status, String local, int capacidadeMaxima, int totalInscritos) {
+        super(id, titulo, data, status);
+        this.local = local;
+        this.capacidadeMaxima = capacidadeMaxima;
+        this.totalInscritos = totalInscritos;
+    }
+
+    public String getLocal() {
+        return local;
+    }
+
+    public void setLocal(String local) {
+        this.local = local;
+    }
+
+    public int getCapacidadeMaxima() {
+        return capacidadeMaxima;
+    }
+
+    public void setCapacidadeMaxima(int capacidadeMaxima) {
+        this.capacidadeMaxima = capacidadeMaxima;
+    }
+
+    public int getTotalInscritos() {
+        return totalInscritos;
+    }
+
+    public void setTotalInscritos(int totalInscritos) {
+        this.totalInscritos = totalInscritos;
+    }
+
+    // Polimorfismo de sobrescrita: define o que "iniciar" significa para evento presencial
+    @Override
+    public void iniciarEvento() {
+        setStatus("Em andamento");
+        System.out.println("===========================================");
+        System.out.println("  EVENTO PRESENCIAL INICIADO!");
+        System.out.println("  Título : " + getTitulo());
+        System.out.println("  Local  : " + local);
+        System.out.println("  Data   : " + getData());
+        System.out.println("  Abrindo as portas para o público...");
+        System.out.println("===========================================");
+    }
+
+    // Verifica se o evento está lotado; lança exceção se estiver
+    public boolean verificarLotacao() throws EventoLotadoException {
+        if (totalInscritos >= capacidadeMaxima) {
+            throw new EventoLotadoException(
+                "Evento '" + getTitulo() + "' está lotado! Capacidade máxima de " + capacidadeMaxima + " atingida."
+            );
+        }
+        return false; // ainda há vagas
+    }
+
+    // Chamado pelo controller ao confirmar uma inscrição neste evento
+    public void incrementarInscritos() throws EventoLotadoException {
+        verificarLotacao();
+        totalInscritos++;
+    }
+
+    public int getVagasRestantes() {
+        return capacidadeMaxima - totalInscritos;
+    }
+
+    @Override
+    public void gerarRelatorio() {
+        super.gerarRelatorio();
+        System.out.println("  Tipo         : Presencial");
+        System.out.println("  Local        : " + local);
+        System.out.println("  Capacidade   : " + capacidadeMaxima);
+        System.out.println("  Inscritos    : " + totalInscritos);
+        System.out.println("  Vagas livres : " + getVagasRestantes());
+        System.out.println("-------------------------------------------");
+    }
+
+    @Override
+    public String toString() {
+        return "[PRESENCIAL] ID: " + getId() +
+               " | Título: " + getTitulo() +
+               " | Data: " + getData() +
+               " | Status: " + getStatus() +
+               " | Local: " + local +
+               " | Vagas: " + getVagasRestantes() + "/" + capacidadeMaxima;
+    }
+}
