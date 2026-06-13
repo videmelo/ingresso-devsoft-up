@@ -12,9 +12,9 @@ public class EventoOnlineView {
     private final EventoOnlineController controller;
     private final Scanner scanner;
 
-    public EventoOnlineView(EventoOnlineController controller, Scanner scanner) {
+    public EventoOnlineView(EventoOnlineController controller) {
         this.controller = controller;
-        this.scanner = scanner;
+        this.scanner = new Scanner(System.in);
     }
 
     public void exibirMenu() {

@@ -11,7 +11,6 @@ public class EventoOnline extends Evento {
         this.plataforma = plataforma;
     }
 
-    // Construtor completo para carregar do arquivo (inclui status)
     public EventoOnline(String id, String titulo, String data, String status, String linkAcesso, String plataforma) {
         super(id, titulo, data, status);
         this.linkAcesso = linkAcesso;
@@ -34,7 +33,6 @@ public class EventoOnline extends Evento {
         this.plataforma = plataforma;
     }
 
-    // Polimorfismo de sobrescrita: define o que "iniciar" significa para evento online
     @Override
     public void iniciarEvento() {
         setStatus("Em andamento");
@@ -47,7 +45,6 @@ public class EventoOnline extends Evento {
         enviarLinkAcesso();
     }
 
-    // Simula o envio do link de acesso a todos os participantes
     public void enviarLinkAcesso() {
         System.out.println("------------------------------------------");
         System.out.println("  Enviando link de acesso...");

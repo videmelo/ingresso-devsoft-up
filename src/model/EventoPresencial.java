@@ -15,7 +15,6 @@ public class EventoPresencial extends Evento {
         this.totalInscritos = 0;
     }
 
-    // Construtor completo para carregar do arquivo (inclui status e totalInscritos)
     public EventoPresencial(String id, String titulo, String data, String status, String local, int capacidadeMaxima, int totalInscritos) {
         super(id, titulo, data, status);
         this.local = local;
@@ -47,7 +46,6 @@ public class EventoPresencial extends Evento {
         this.totalInscritos = totalInscritos;
     }
 
-    // Polimorfismo de sobrescrita: define o que "iniciar" significa para evento presencial
     @Override
     public void iniciarEvento() {
         setStatus("Em andamento");
@@ -60,7 +58,6 @@ public class EventoPresencial extends Evento {
         System.out.println("===========================================");
     }
 
-    // Verifica se o evento está lotado; lança exceção se estiver
     public boolean verificarLotacao() throws EventoLotadoException {
         if (totalInscritos >= capacidadeMaxima) {
             throw new EventoLotadoException(
@@ -70,7 +67,6 @@ public class EventoPresencial extends Evento {
         return false; // ainda há vagas
     }
 
-    // Chamado pelo controller ao confirmar uma inscrição neste evento
     public void incrementarInscritos() throws EventoLotadoException {
         verificarLotacao();
         totalInscritos++;

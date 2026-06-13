@@ -10,7 +10,7 @@ import java.util.List;
 
 public class EventoOnlineController {
 
-    private static final String ARQUIVO = "dados/eventos_online.json";
+    private static final String ARQUIVO = "dados/eventos_online.dat";
     private List<EventoOnline> listaEventos = new ArrayList<>();
 
     // ─── CRUD ────────────────────────────────────────────────────────────────
@@ -81,11 +81,11 @@ public class EventoOnlineController {
     // ─── Persistência ────────────────────────────────────────────────────────
 
     public void salvarDadosArquivo() {
-        ArquivoUtil.salvarDados(listaEventos, ARQUIVO);
+        ArquivoUtil.salvarDadosDat(listaEventos, ARQUIVO);
     }
 
     public void carregarDadosArquivo() {
-        List<EventoOnline> carregados = ArquivoUtil.carregarEventosOnline(ARQUIVO);
+        List<EventoOnline> carregados = ArquivoUtil.carregarDadosDat(ARQUIVO);
         listaEventos.addAll(carregados);
         LogUtil.info("Eventos online carregados: " + listaEventos.size() + " registro(s).");
     }

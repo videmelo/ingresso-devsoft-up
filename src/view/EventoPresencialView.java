@@ -13,9 +13,9 @@ public class EventoPresencialView {
     private final EventoPresencialController controller;
     private final Scanner scanner;
 
-    public EventoPresencialView(EventoPresencialController controller, Scanner scanner) {
+    public EventoPresencialView(EventoPresencialController controller) {
         this.controller = controller;
-        this.scanner = scanner;
+        this.scanner = new Scanner(System.in);
     }
 
     public void exibirMenu() {

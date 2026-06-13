@@ -11,7 +11,7 @@ import java.util.List;
 
 public class EventoPresencialController {
 
-    private static final String ARQUIVO = "dados/eventos_presenciais.json";
+    private static final String ARQUIVO = "dados/eventos_presenciais.dat";
     private List<EventoPresencial> listaEventos = new ArrayList<>();
 
     // ─── CRUD ────────────────────────────────────────────────────────────────
@@ -83,11 +83,11 @@ public class EventoPresencialController {
     // ─── Persistência ────────────────────────────────────────────────────────
 
     public void salvarDadosArquivo() {
-        ArquivoUtil.salvarDados(listaEventos, ARQUIVO);
+        ArquivoUtil.salvarDadosDat(listaEventos, ARQUIVO);
     }
 
     public void carregarDadosArquivo() {
-        List<EventoPresencial> carregados = ArquivoUtil.carregarEventosPresenciais(ARQUIVO);
+        List<EventoPresencial> carregados = ArquivoUtil.carregarDadosDat(ARQUIVO);
         listaEventos.addAll(carregados);
         LogUtil.info("Eventos presenciais carregados: " + listaEventos.size() + " registro(s).");
     }
