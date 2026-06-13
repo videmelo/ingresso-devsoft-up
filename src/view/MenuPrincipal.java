@@ -2,6 +2,7 @@ package view;
 
 import controller.OrganizadorController;
 import controller.ParticipanteController;
+import exceptions.EntidadeNaoEncontradaException;
 
 import java.util.Scanner;
 
@@ -77,8 +78,11 @@ public class MenuPrincipal {
         int opcao = -1;
         do {
             System.out.println("\n--- GERENCIAR PESSOAS ---");
-            System.out.println("1. Menu de Organizadores");
-            System.out.println("2. Menu de Participantes");
+            System.out.println("1. Cadastrar Novo Organizador");
+            System.out.println("2. Cadastrar Novo Participante");
+            System.out.println("3. Listar Todos os Usuários");
+            System.out.println("4. Atualizar Dados de Usuário");
+            System.out.println("5. Excluir Usuário");
             System.out.println("0. Voltar ao Menu Principal");
             System.out.print("Escolha uma opção: ");
             
@@ -88,10 +92,33 @@ public class MenuPrincipal {
 
                 switch (opcao) {
                     case 1:
-                        organizadorView.exibirMenu();
+                        organizadorView.cadastrar();
                         break;
                     case 2:
-                        participanteView.exibirMenu();
+                        participanteView.cadastrar();
+                        break;
+                    case 3:
+                        System.out.println("\n--- LISTA DE USUÁRIOS ---");
+                        organizadorView.listar();
+                        participanteView.listar();
+                        break;
+                    case 4:
+                        System.out.print("Digite o ID do Usuário a atualizar: ");
+                        String idUpdate = scanner.nextLine();
+                        if (atualizarSeExistir(idUpdate)) {
+                            System.out.println("Processo de atualização finalizado.");
+                        } else {
+                            System.out.println("Erro: Usuário não encontrado.");
+                        }
+                        break;
+                    case 5:
+                        System.out.print("Digite o ID do Usuário a excluir: ");
+                        String idDel = scanner.nextLine();
+                        if (deletarSeExistir(idDel)) {
+                            System.out.println("Usuário excluído com sucesso.");
+                        } else {
+                            System.out.println("Erro: Usuário não encontrado.");
+                        }
                         break;
                     case 0:
                         System.out.println("Retornando...");
@@ -103,5 +130,35 @@ public class MenuPrincipal {
                 System.out.println("Erro: Entrada inválida. Digite um número.");
             }
         } while (opcao != 0);
+    }
+
+    private boolean atualizarSeExistir(String id) {
+        for (model.Organizador o : organizadorController.listarOrganizadores()) {
+            if (o.getId().equals(id)) {
+                organizadorView.atualizar(id);
+                return true;
+            }
+        }
+        for (model.Participante p : participanteController.listarParticipantes()) {
+            if (p.getId().equals(id)) {
+                participanteView.atualizar(id);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean deletarSeExistir(String id) {
+        try {
+            organizadorController.deletarOrganizador(id);
+            return true;
+        } catch (EntidadeNaoEncontradaException e1) {
+            try {
+                participanteController.deletarParticipante(id);
+                return true;
+            } catch (EntidadeNaoEncontradaException e2) {
+                return false;
+            }
+        }
     }
 }
