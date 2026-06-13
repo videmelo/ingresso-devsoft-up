@@ -49,11 +49,11 @@ Cada Desenvolvedor deve criar sua branch (ex: `git checkout -b feature/dev1`) a 
 
 ### Tarefas do DEV 2 (Módulo Eventos Físicos e Digitais)
 *Entidades:* `EventoPresencial` e `EventoOnline`
-- [ ] **Model:** Criar as classes estendendo `Evento`.
-- [ ] **Model:** Implementar lógica de `verificarLotacao()` (lançando `EventoLotadoException`) e `enviarLinkAcesso()`.
-- [ ] **Controller:** Criar `EventoPresencialController` e `EventoOnlineController` (CRUD 2 base e métodos de ler/salvar arquivo).
-- [ ] **View:** Criar `EventoPresencialView` e `EventoOnlineView` com Scanner.
-- [ ] **Integração Base:** Garantir o polimorfismo do método abstrato `iniciarEvento()`.
+- [x] **Model:** Criar as classes estendendo `Evento`.
+- [x] **Model:** Implementar lógica de `verificarLotacao()` (lançando `EventoLotadoException`) e `enviarLinkAcesso()`.
+- [x] **Controller:** Criar `EventoPresencialController` e `EventoOnlineController` (CRUD 2 base e métodos de ler/salvar arquivo).
+- [x] **View:** Criar `EventoPresencialView` e `EventoOnlineView` com Scanner.
+- [x] **Integração Base:** Garantir o polimorfismo do método abstrato `iniciarEvento()`.
 
 ### Tarefas do DEV 3 (Módulo Estrutura)
 *Entidades:* `Sessao` e `Local`
