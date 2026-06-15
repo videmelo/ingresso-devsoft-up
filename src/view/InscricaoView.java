@@ -7,8 +7,11 @@ import exceptions.EntidadeNaoEncontradaException;
 import model.Inscricao;
 import model.Participante;
 import model.Sessao;
+import model.Evento;
 
 import java.util.Scanner;
+import java.util.Map;
+import java.util.List;
 
 public class InscricaoView {
     private InscricaoController controller;
@@ -32,6 +35,7 @@ public class InscricaoView {
             System.out.println("3. Atualizar Inscrição");
             System.out.println("4. Cancelar Inscrição");
             System.out.println("5. Excluir Inscrição");
+            System.out.println("6. Relatório: Participantes Agrupados por Evento (Uso de Map)");
             System.out.println("0. Voltar");
             System.out.print("Escolha uma opção: ");
 
@@ -51,6 +55,9 @@ public class InscricaoView {
                     case 5:
                         System.out.print("ID da Inscrição: ");
                         deletar(scanner.nextLine());
+                        break;
+                    case 6:
+                        relatorioAgrupado();
                         break;
                     case 0: break;
                     default: System.out.println("Opção inválida.");
@@ -172,5 +179,27 @@ public class InscricaoView {
         } catch (Exception e) {
             System.out.println("Erro ao deletar: " + e.getMessage());
         }
+    }
+
+    public void relatorioAgrupado() {
+        System.out.println("\n--- RELATÓRIO: PARTICIPANTES POR EVENTO ---");
+        Map<Evento, List<Participante>> mapa = controller.agruparParticipantesPorEvento();
+        
+        if (mapa.isEmpty()) {
+            System.out.println("Nenhum dado encontrado para gerar o relatório.");
+            return;
+        }
+
+        for (Map.Entry<Evento, List<Participante>> entry : mapa.entrySet()) {
+            Evento evento = entry.getKey();
+            List<Participante> participantes = entry.getValue();
+            
+            System.out.println("\n>> EVENTO: " + evento.getTitulo() + " (Data: " + evento.getData() + ")");
+            System.out.println("   Total de Participantes Únicos: " + participantes.size());
+            for (Participante p : participantes) {
+                System.out.println("   - " + p.getNome() + " (Matrícula: " + p.getMatricula() + ")");
+            }
+        }
+        System.out.println("-------------------------------------------");
     }
 }
