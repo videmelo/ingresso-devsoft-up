@@ -102,6 +102,11 @@ public class CertificadoView {
                 return;
             }
 
+            if (!participante.isPresente()) {
+                System.out.println("Erro: O participante não realizou o check-in e está ausente.");
+                return;
+            }
+
             System.out.print("Data de Emissão: ");
             String data = scanner.nextLine();
             System.out.print("Carga Horária: ");

@@ -72,6 +72,12 @@ public class EventoPresencial extends Evento {
         totalInscritos++;
     }
 
+    public void decrementarInscritos() {
+        if (totalInscritos > 0) {
+            totalInscritos--;
+        }
+    }
+
     public int getVagasRestantes() {
         return capacidadeMaxima - totalInscritos;
     }

@@ -56,7 +56,7 @@ public class PagamentoView {
         String idI = scanner.nextLine();
         Inscricao inscricao = null;
         for (Inscricao insc : iController.listarInscricoes()) {
-            if (insc.getId().equals(idI)) { inscricao = insc; break; }
+            if (insc.getId().equals(idI) && insc.getStatus().equals("Pendente")) { inscricao = insc; break; }
         }
 
         if (inscricao != null) {

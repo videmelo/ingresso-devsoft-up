@@ -93,6 +93,7 @@ public class InscricaoView {
             String data = scanner.nextLine();
             Inscricao insc = new Inscricao(id, participante, sessao, data, "Pendente");
             controller.cadastrarInscricao(insc);
+            participante.getHistoricoInscricoes().add(insc);
             System.out.println("Inscrição realizada com sucesso! Status: Pendente.");
         } else {
             System.out.println("Participante ou Sessão não encontrados.");
@@ -111,6 +112,10 @@ public class InscricaoView {
             for (Inscricao insc : controller.listarInscricoes()) {
                 if (insc.getId().equals(id)) {
                     insc.cancelar();
+                    if (insc.getSessao() != null && insc.getSessao().getEventoVinculado() instanceof model.EventoPresencial) {
+                        model.EventoPresencial ep = (model.EventoPresencial) insc.getSessao().getEventoVinculado();
+                        ep.decrementarInscritos();
+                    }
                     System.out.println("Inscrição cancelada com sucesso!");
                     return;
                 }
