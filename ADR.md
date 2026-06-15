@@ -3,7 +3,7 @@
 
 ## Descrição e Objetivo do Projeto
 
-O **Sistema de Gestão de Eventos** é uma aplicação de linha de comando (CLI) desenvolvida em Java, criada para gerenciar de ponta a ponta o ciclo de vida de eventos acadêmicos, corporativos ou de entretenimento. 
+O **Sistema de Gestão de Eventos** é uma aplicação de linha de comando (CLI) desenvolvida em Java, criada para gerenciar de ponta a ponta o ciclo de vida de eventos acadêmicos, corporativos ou de entretenimento.
 
 * **O que o sistema faz?**
   Ele permite que organizadores estruturem eventos (físicos ou online), definam categorias, aloquem locais e criem cronogramas de sessões (palestras/atividades). Para os usuários, permite que participantes se cadastrem, realizem inscrições em sessões, processem pagamentos (com suporte a cupons de desconto), façam check-in de presença e, ao final, emitam certificados validados por um código de autenticidade.
@@ -20,7 +20,7 @@ Este documento define as diretrizes arquiteturais, a divisão de tarefas, a mode
 ### 1.1. Configuração Inicial e Divisão da Equipe
 * **Repositório:** Deve ser criado um repositório no GitHub. O controle de versão é obrigatório e todos os membros da equipe (5 pessoas) devem realizar commits organizados ao longo do desenvolvimento.
 * **A Regra dos MVCs:** Para garantir a robustez exigida, o sistema não deve ser simples. A regra estabelecida é que **cada desenvolvedor deve implementar 2 MVCs (Model, View e Controller)**. Como a equipe possui 5 integrantes, o sistema precisará ter exatamente 10 classes Model (entidades), 10 Controllers e 10 Views.
-  * **Dica:** Para evitar conflitos de código no controle de versão, cada membro deve ficar responsável pelo desenvolvimento completo (Model, View, Controller e persistência) de entidades específicas. Exemplo: um desenvolvedor assume `Participante` e `Inscricao`.
+    * **Dica:** Para evitar conflitos de código no controle de versão, cada membro deve ficar responsável pelo desenvolvimento completo (Model, View, Controller e persistência) de entidades específicas. Exemplo: um desenvolvedor assume `Participante` e `Inscricao`.
 
 ### 1.2. Os 3 CRUDs Mínimos Interligados
 O sistema exige no mínimo 3 CRUDs (Cadastro, Alteração, Deleção e Listagem) que possuam relacionamento entre si. Para o sistema de eventos e ingressos, pode-se usar:
@@ -140,25 +140,25 @@ A documentação base fornece diretrizes para a estrutura de um sistema de event
 * **Local:** `/src/interfaces/Checkinavel.java`
 * **Propósito:** Contrato para entidades que necessitam de validação de presença.
 * **Conteúdo Obrigatório:**
-  * `public boolean realizarCheckin();`
-    * **O que deve fazer:** Deve verificar se o check-in é válido (ex: se a data atual corresponde à data do evento ou se o participante possui inscrição confirmada). Retorna `true` se o check-in for bem-sucedido e altera o status interno de presença, e `false` caso contrário.
+    * `public boolean realizarCheckin();`
+        * **O que deve fazer:** Deve verificar se o check-in é válido (ex: se a data atual corresponde à data do evento ou se o participante possui inscrição confirmada). Retorna `true` se o check-in for bem-sucedido e altera o status interno de presença, e `false` caso contrário.
 
 #### 2. Arquivo: `RelatorioGeravel.java` (Interface)
 * **Local:** `/src/interfaces/RelatorioGeravel.java`
 * **Propósito:** Contrato para entidades que podem gerar dados estatísticos ou de engajamento.
 * **Conteúdo Obrigatório:**
-  * `public void gerarRelatorio();`
-    * **O que deve fazer:** Deve realizar a leitura dos dados consolidados da entidade (como total de inscritos, total de check-ins, receitas geradas) e formatar um texto para ser impresso no console ou salvo em um arquivo txt.
+    * `public void gerarRelatorio();`
+        * **O que deve fazer:** Deve realizar a leitura dos dados consolidados da entidade (como total de inscritos, total de check-ins, receitas geradas) e formatar um texto para ser impresso no console ou salvo em um arquivo txt.
 
 #### 3. Arquivo: `Pessoa.java` (Classe Abstrata)
 * **Local:** `/src/model/Pessoa.java`
 * **Propósito:** Classe base que agrupa atributos comuns a todas as pessoas do sistema. Não deve ser instanciada diretamente.
 * **Atributos (`private`):** `String id`, `String nome`, `String cpf`, `String email`
 * **Métodos Obrigatórios:**
-  * Construtor padrão e/ou construtor recebendo os atributos.
-  * Getters e Setters para todos os atributos.
-  * `public abstract void exibirDadosPessoais();`
-    * **O que deve fazer:** Por ser abstrato, não possui corpo aqui. Obriga que `Organizador` e `Participante` implementem como seus dados devem ser exibidos no console (usando `System.out.println`).
+    * Construtor padrão e/ou construtor recebendo os atributos.
+    * Getters e Setters para todos os atributos.
+    * `public abstract void exibirDadosPessoais();`
+        * **O que deve fazer:** Por ser abstrato, não possui corpo aqui. Obriga que `Organizador` e `Participante` implementem como seus dados devem ser exibidos no console (usando `System.out.println`).
 
 #### 4. Arquivo: `Evento.java` (Classe Abstrata)
 * **Local:** `/src/model/Evento.java`
@@ -166,71 +166,71 @@ A documentação base fornece diretrizes para a estrutura de um sistema de event
 * **Implementa:** `RelatorioGeravel` (`public abstract class Evento implements RelatorioGeravel`)
 * **Atributos (`private`):** `String id`, `String titulo`, `String data`, `String status` (ex: "Agendado", "Em andamento", "Finalizado")
 * **Métodos Obrigatórios:**
-  * Construtor recebendo os atributos.
-  * Getters e Setters para todos os atributos.
-  * `public abstract void iniciarEvento();`
-    * **O que deve fazer:** Por ser abstrato, obriga as filhas a definirem o que significa "iniciar".
-  * `public void gerarRelatorio()`
-    * **O que deve fazer:** Implementa a interface. Deve exibir no console um resumo contendo o `titulo`, a `data` e o `status` atual do evento de forma amigável.
+    * Construtor recebendo os atributos.
+    * Getters e Setters para todos os atributos.
+    * `public abstract void iniciarEvento();`
+        * **O que deve fazer:** Por ser abstrato, obriga as filhas a definirem o que significa "iniciar".
+    * `public void gerarRelatorio()`
+        * **O que deve fazer:** Implementa a interface. Deve exibir no console um resumo contendo o `titulo`, a `data` e o `status` atual do evento de forma amigável.
 
 ### 3.2. Modelagem por Entidade Concreta (10 MVCs)
 
 **Módulo 1: Pessoas**
 * **5. `Organizador.java`** (extends Pessoa)
-  * **Atributos:** `String setor`, `String nivelAcesso`
-  * **Métodos Específicos:**
-    * `public void exibirDadosPessoais()`: Imprime no console uma ficha formatada (ex: `[ORGANIZADOR] Nome: X | CPF: Y | Setor: Z`).
-    * `public boolean aprovarEvento(Evento evento)`: Verifica se o `nivelAcesso` do organizador permite aprovação (ex: nível "Admin"). Se sim, altera o status do objeto `evento` para "Aprovado" e retorna `true`.
+    * **Atributos:** `String setor`, `String nivelAcesso`
+    * **Métodos Específicos:**
+        * `public void exibirDadosPessoais()`: Imprime no console uma ficha formatada (ex: `[ORGANIZADOR] Nome: X | CPF: Y | Setor: Z`).
+        * `public boolean aprovarEvento(Evento evento)`: Verifica se o `nivelAcesso` do organizador permite aprovação (ex: nível "Admin"). Se sim, altera o status do objeto `evento` para "Aprovado" e retorna `true`.
 * **6. `Participante.java`** (extends Pessoa implements Checkinavel)
-  * **Atributos:** `String matricula`, `List<Inscricao> historicoInscricoes`
-  * **Métodos Específicos:**
-    * `public void exibirDadosPessoais()`: Imprime no console: `[PARTICIPANTE] Nome: X | Matrícula: Y | Total Inscrições: Z`.
-    * `public boolean realizarCheckin()`: Verifica se a lista `historicoInscricoes` possui alguma inscrição confirmada para a data atual. Se possuir, altera o status interno de presença e retorna `true`.
+    * **Atributos:** `String matricula`, `List<Inscricao> historicoInscricoes`
+    * **Métodos Específicos:**
+        * `public void exibirDadosPessoais()`: Imprime no console: `[PARTICIPANTE] Nome: X | Matrícula: Y | Total Inscrições: Z`.
+        * `public boolean realizarCheckin()`: Verifica se a lista `historicoInscricoes` possui alguma inscrição confirmada para a data atual. Se possuir, altera o status interno de presença e retorna `true`.
 
 **Módulo 2: Eventos**
 * **7. `EventoPresencial.java`** (extends Evento)
-  * **Atributos:** `Local local`, `int capacidadeMaxima`
-  * **Métodos Específicos:**
-    * `public void iniciarEvento()`: Altera o `status` (herdado) para "Em andamento" e imprime uma mensagem indicando a abertura das portas físicas do `local`.
-    * `public boolean verificarLotacao() throws EventoLotadoException`: Verifica se a quantidade atual de inscrições/check-ins atingiu a `capacidadeMaxima`. Se estiver lotado, lança a exceção `EventoLotadoException`, impedindo novas inscrições. Retorna `false` caso ainda haja vagas.
+    * **Atributos:** `Local local`, `int capacidadeMaxima`
+    * **Métodos Específicos:**
+        * `public void iniciarEvento()`: Altera o `status` (herdado) para "Em andamento" e imprime uma mensagem indicando a abertura das portas físicas do `local`.
+        * `public boolean verificarLotacao() throws EventoLotadoException`: Verifica se a quantidade atual de inscrições/check-ins atingiu a `capacidadeMaxima`. Se estiver lotado, lança a exceção `EventoLotadoException`, impedindo novas inscrições. Retorna `false` caso ainda haja vagas.
 * **8. `EventoOnline.java`** (extends Evento)
-  * **Atributos:** `String linkAcesso`, `String plataforma`
-  * **Métodos Específicos:**
-    * `public void iniciarEvento()`: Altera o `status` (herdado) para "Em andamento" e aciona o método `enviarLinkAcesso()`.
-    * `public void enviarLinkAcesso()`: Simula o envio de e-mails, imprimindo no console: `"Enviando link [linkAcesso] da plataforma [plataforma]"`.
+    * **Atributos:** `String linkAcesso`, `String plataforma`
+    * **Métodos Específicos:**
+        * `public void iniciarEvento()`: Altera o `status` (herdado) para "Em andamento" e aciona o método `enviarLinkAcesso()`.
+        * `public void enviarLinkAcesso()`: Simula o envio de e-mails, imprimindo no console: `"Enviando link [linkAcesso] da plataforma [plataforma]"`.
 
 **Módulo 3: Estrutura**
 * **9. `Sessao.java`**
-  * **Atributos:** `String id`, `String tema`, `String horarioInicio`, `String palestrante`, `Evento eventoVinculado`
-  * **Métodos Específicos:**
-    * `public void reagendarSessao(String novoHorario)`: Sobrescreve a variável `horarioInicio` com o `novoHorario` recebido e imprime um aviso de reagendamento.
+    * **Atributos:** `String id`, `String tema`, `String horarioInicio`, `String palestrante`, `Evento eventoVinculado`
+    * **Métodos Específicos:**
+        * `public void reagendarSessao(String novoHorario)`: Sobrescreve a variável `horarioInicio` com o `novoHorario` recebido e imprime um aviso de reagendamento.
 * **10. `Local.java`**
-  * **Atributos:** `String id`, `String nome`, `String endereco`, `boolean possuiAcessibilidade`
-  * **Métodos Específicos:**
-    * `public boolean verificarDisponibilidadeData(String data)`: Checa internamente se a `data` passada já está ocupada. Se o local estiver livre, retorna `true`.
+    * **Atributos:** `String id`, `String nome`, `String endereco`, `boolean possuiAcessibilidade`
+    * **Métodos Específicos:**
+        * `public boolean verificarDisponibilidadeData(String data)`: Checa internamente se a `data` passada já está ocupada. Se o local estiver livre, retorna `true`.
 
 **Módulo 4: Vínculos e Finanças**
 * **11. `Inscricao.java`**
-  * **Atributos:** `String id`, `Participante participante`, `Sessao sessao`, `String dataInscricao`, `String status`
-  * **Métodos Específicos:**
-    * `public void confirmar()`: Altera a variável `status` para "Confirmada". Deve ser acionado pelo Pagamento.
-    * `public void cancelar()`: Altera a variável `status` para "Cancelada", liberando a vaga na sessão.
+    * **Atributos:** `String id`, `Participante participante`, `Sessao sessao`, `String dataInscricao`, `String status`
+    * **Métodos Específicos:**
+        * `public void confirmar()`: Altera a variável `status` para "Confirmada". Deve ser acionado pelo Pagamento.
+        * `public void cancelar()`: Altera a variável `status` para "Cancelada", liberando a vaga na sessão.
 * **12. `Pagamento.java`**
-  * **Atributos:** `String id`, `Inscricao inscricao`, `double valor`, `String metodoPagamento`, `boolean pago`
-  * **Métodos Específicos:**
-    * `public boolean processarPagamento()`: Valida se o `valor` > 0, altera o atributo `pago` para `true` e aciona `confirmar()` da inscrição.
-    * `public boolean processarPagamento(String cupomDesconto)`: (Sobrecarga) Verifica se o cupom é válido. Se for, deduz uma porcentagem do `valor` e em seguida aciona a validação padrão de pagamento.
+    * **Atributos:** `String id`, `Inscricao inscricao`, `double valor`, `String metodoPagamento`, `boolean pago`
+    * **Métodos Específicos:**
+        * `public boolean processarPagamento()`: Valida se o `valor` > 0, altera o atributo `pago` para `true` e aciona `confirmar()` da inscrição.
+        * `public boolean processarPagamento(String cupomDesconto)`: (Sobrecarga) Verifica se o cupom é válido. Se for, deduz uma porcentagem do `valor` e em seguida aciona a validação padrão de pagamento.
 
 **Módulo 5: Finalização**
 * **13. `Categoria.java`**
-  * **Atributos:** `String id`, `String nome`, `String descricao`
-  * **Métodos Específicos:**
-    * `public void atualizarDescricao(String novaDescricao)`: Substitui o valor da variável `descricao` pela `novaDescricao`.
+    * **Atributos:** `String id`, `String nome`, `String descricao`
+    * **Métodos Específicos:**
+        * `public void atualizarDescricao(String novaDescricao)`: Substitui o valor da variável `descricao` pela `novaDescricao`.
 * **14. `Certificado.java`**
-  * **Atributos:** `String id`, `Participante participante`, `Evento evento`, `String dataEmissao`, `int cargaHoraria`
-  * **Métodos Específicos:**
-    * `public void emitir() throws PagamentoPendenteException`: Verifica se o `evento` está "Finalizado" e se o `participante` realizou check-in. Também deve validar se a inscrição foi paga; se não, lança `PagamentoPendenteException`. Se tudo estiver válido, imprime o diploma formatado no console.
-    * `public String gerarCodigoAutenticidade()`: Cria e retorna um hash de validação simples (ex: concatenação do ID do evento com a matrícula do participante).
+    * **Atributos:** `String id`, `Participante participante`, `Evento evento`, `String dataEmissao`, `int cargaHoraria`
+    * **Métodos Específicos:**
+        * `public void emitir() throws PagamentoPendenteException`: Verifica se o `evento` está "Finalizado" e se o `participante` realizou check-in. Também deve validar se a inscrição foi paga; se não, lança `PagamentoPendenteException`. Se tudo estiver válido, imprime o diploma formatado no console.
+        * `public String gerarCodigoAutenticidade()`: Cria e retorna um hash de validação simples (ex: concatenação do ID do evento com a matrícula do participante).
 
 ## Parte 4: Regras para os Controllers
 
@@ -278,7 +278,7 @@ Neste submenu, o foco é o cumprimento do **CRUD 1 (Pessoas)**.
 * **1.5. Excluir Usuário:** Remove o usuário das listas em memória.
 
 #### **Opção 2: Gerenciar Eventos e Estrutura**
-Neste submenu, o foco é o **CRUD 2 (Eventos e Sessões)**. 
+Neste submenu, o foco é o **CRUD 2 (Eventos e Sessões)**.
 * **2.1. Cadastrar Categoria:** Define um tema (ex: TI, Design) via `CategoriaController`.
 * **2.2. Cadastrar Local (Físico):** Registra o espaço físico (nome, endereço, acessibilidade).
 * **2.3. Criar Evento:** O sistema exige o ID de um Organizador. Depois, pergunta se é "Presencial" ou "Online". Coleta os dados, vincula à Categoria (e a um objeto `Local` existente, se físico). Se o organizador for Admin, o evento nasce "Aprovado"; senão, nasce "Agendado".
@@ -310,20 +310,20 @@ O sistema não deve encerrar abruptamente ("crachar") devido a entradas inválid
 
 * **Pacote de Exceções:** Deve ser criado um pacote `/src/exceptions/`.
 * **Classes de Exceção Sugeridas (que herdam de `Exception` ou `RuntimeException`):**
-  * `EntidadeNaoEncontradaException`: Disparada quando o usuário digita um ID ou CPF que não existe nas listas.
-  * `EventoLotadoException`: Disparada pelo Controller ao tentar inscrever alguém em um `EventoPresencial` cuja `capacidadeMaxima` já foi atingida.
-  * `PagamentoPendenteException`: Disparada ao tentar gerar um `Certificado` para uma inscrição que ainda não foi paga.
-  * `EntradaInvalidaException`: Disparada nas *Views* se o usuário digitar uma letra quando o menu espera um número (tratamento do `InputMismatchException` do `Scanner`).
+    * `EntidadeNaoEncontradaException`: Disparada quando o usuário digita um ID ou CPF que não existe nas listas.
+    * `EventoLotadoException`: Disparada pelo Controller ao tentar inscrever alguém em um `EventoPresencial` cuja `capacidadeMaxima` já foi atingida.
+    * `PagamentoPendenteException`: Disparada ao tentar gerar um `Certificado` para uma inscrição que ainda não foi paga.
+    * `EntradaInvalidaException`: Disparada nas *Views* se o usuário digitar uma letra quando o menu espera um número (tratamento do `InputMismatchException` do `Scanner`).
 
 ### 6.2. Fluxo de Trabalho no Git e GitHub
-Com 5 pessoas desenvolvendo simultaneamente, realizar commits diretamente na branch `main` causará conflitos destrutivos. 
+Com 5 pessoas desenvolvendo simultaneamente, realizar commits diretamente na branch `main` causará conflitos destrutivos.
 
-* **Regra de Branches:** Ninguém deve comitar na `main`. Cada membro deve criar uma *branch* específica para a entidade que está desenvolvendo. 
-  * Exemplo: `git checkout -b feature/participante-inscricao`.
+* **Regra de Branches:** Ninguém deve comitar na `main`. Cada membro deve criar uma *branch* específica para a entidade que está desenvolvendo.
+    * Exemplo: `git checkout -b feature/participante-inscricao`.
 * **Commits Semânticos:** As mensagens de commit devem deixar claro o que foi feito, utilizando prefixos padrões:
-  * `feat: cria classe Participante e metodos base` (Para novas funcionalidades)
-  * `fix: corrige bug no calculo de desconto do pagamento` (Para correções)
-  * `docs: atualiza o README com instruções de uso` (Para documentação)
+    * `feat: cria classe Participante e metodos base` (Para novas funcionalidades)
+    * `fix: corrige bug no calculo de desconto do pagamento` (Para correções)
+    * `docs: atualiza o README com instruções de uso` (Para documentação)
 * **Pull Requests (PRs):** Ao terminar suas 2 entidades (Model, Controller e View), o membro deve abrir um Pull Request para a `main`. Pelo menos um outro membro do grupo deve revisar o código antes de realizar o *merge*.
 
 ### 6.3. Padronização do Arquivo de Log
@@ -332,10 +332,10 @@ O documento exige a gravação de logs (atividades e erros). Para que o arquivo 
 * **Layout Obrigatório da Linha de Log:**
   `[DATA/HORA] - [NÍVEL] - [MENSAGEM]`
 * **Níveis de Log Permitidos:**
-  * `[INFO]`: Para ações de sucesso (ex: cadastros, aprovação de eventos).
-  * `[WARN]`: Para ações de negócio bloqueadas (ex: tentativa de check-in inválida, evento lotado).
-  * `[ERROR]`: Para exceções técnicas e falhas de sistema (ex: falha ao ler o arquivo `.dat`, variável nula).
+    * `[INFO]`: Para ações de sucesso (ex: cadastros, aprovação de eventos).
+    * `[WARN]`: Para ações de negócio bloqueadas (ex: tentativa de check-in inválida, evento lotado).
+    * `[ERROR]`: Para exceções técnicas e falhas de sistema (ex: falha ao ler o arquivo `.dat`, variável nula).
 * **Exemplos práticos no arquivo:**
-  * `[10/06/2026 14:30:15] - [INFO] - Novo Participante cadastrado: Joao Silva (Matricula: 202601)`
-  * `[10/06/2026 15:45:00] - [WARN] - Tentativa de inscricao falhou: Evento ID 05 lotado.`
-  * `[10/06/2026 16:00:22] - [ERROR] - Falha ao carregar dadosArquivo(): Arquivo participantes.dat nao encontrado.`
+    * `[10/06/2026 14:30:15] - [INFO] - Novo Participante cadastrado: Joao Silva (Matricula: 202601)`
+    * `[10/06/2026 15:45:00] - [WARN] - Tentativa de inscricao falhou: Evento ID 05 lotado.`
+    * `[10/06/2026 16:00:22] - [ERROR] - Falha ao carregar dadosArquivo(): Arquivo participantes.dat nao encontrado.`
