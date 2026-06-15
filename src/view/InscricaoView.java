@@ -35,7 +35,7 @@ public class InscricaoView {
             System.out.println("3. Atualizar Inscrição");
             System.out.println("4. Cancelar Inscrição");
             System.out.println("5. Excluir Inscrição");
-            System.out.println("6. Relatório: Participantes Agrupados por Evento (Uso de Map)");
+            System.out.println("6. Relatório Partcipantes Por Evento");
             System.out.println("0. Voltar");
             System.out.print("Escolha uma opção: ");
 
