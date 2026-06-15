@@ -29,7 +29,9 @@ public class InscricaoView {
             System.out.println("\n--- GERENCIAR INSCRIÇÕES ---");
             System.out.println("1. Realizar Inscrição");
             System.out.println("2. Listar Inscrições");
-            System.out.println("3. Cancelar Inscrição");
+            System.out.println("3. Atualizar Inscrição");
+            System.out.println("4. Cancelar Inscrição");
+            System.out.println("5. Excluir Inscrição");
             System.out.println("0. Voltar");
             System.out.print("Escolha uma opção: ");
 
@@ -38,9 +40,17 @@ public class InscricaoView {
                 switch (opcao) {
                     case 1: cadastrar(); break;
                     case 2: listar(); break;
-                    case 3: 
+                    case 3:
+                        System.out.print("ID da Inscrição: ");
+                        atualizar(scanner.nextLine());
+                        break;
+                    case 4: 
                         System.out.print("ID da Inscrição: ");
                         cancelar(scanner.nextLine());
+                        break;
+                    case 5:
+                        System.out.print("ID da Inscrição: ");
+                        deletar(scanner.nextLine());
                         break;
                     case 0: break;
                     default: System.out.println("Opção inválida.");
@@ -123,6 +133,44 @@ public class InscricaoView {
             throw new EntidadeNaoEncontradaException("Inscrição não encontrada.");
         } catch (EntidadeNaoEncontradaException e) {
             System.out.println(e.getMessage());
+        }
+    }
+
+    public void atualizar(String id) {
+        System.out.println("\n--- ATUALIZAR INSCRIÇÃO ---");
+        System.out.print("Nova Data: ");
+        String data = scanner.nextLine();
+        System.out.print("Novo Status (Pendente/Confirmada/Cancelada): ");
+        String status = scanner.nextLine();
+
+        try {
+            for (Inscricao insc : controller.listarInscricoes()) {
+                if (insc.getId().equals(id)) {
+                    Inscricao inscAtualizada = new Inscricao(id, insc.getParticipante(), insc.getSessao(), data, status);
+                    inscAtualizada.setCompareceu(insc.isCompareceu());
+                    if (controller.atualizarInscricao(id, inscAtualizada)) {
+                        System.out.println("Inscrição atualizada com sucesso!");
+                    } else {
+                        System.out.println("Inscrição não encontrada no controller.");
+                    }
+                    return;
+                }
+            }
+            throw new EntidadeNaoEncontradaException("Inscrição não encontrada.");
+        } catch (EntidadeNaoEncontradaException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void deletar(String id) {
+        try {
+            if (controller.deletarInscricao(id)) {
+                System.out.println("Inscrição deletada com sucesso!");
+            } else {
+                System.out.println("Inscrição não encontrada.");
+            }
+        } catch (Exception e) {
+            System.out.println("Erro ao deletar: " + e.getMessage());
         }
     }
 }

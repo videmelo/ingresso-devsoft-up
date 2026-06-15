@@ -24,6 +24,8 @@ public class PagamentoView {
             System.out.println("\n--- GERENCIAR PAGAMENTOS ---");
             System.out.println("1. Processar Novo Pagamento");
             System.out.println("2. Listar Pagamentos");
+            System.out.println("3. Atualizar Pagamento");
+            System.out.println("4. Excluir Pagamento");
             System.out.println("0. Voltar");
             System.out.print("Escolha uma opção: ");
 
@@ -32,6 +34,14 @@ public class PagamentoView {
                 switch (opcao) {
                     case 1: cadastrar(); break;
                     case 2: listar(); break;
+                    case 3:
+                        System.out.print("ID do Pagamento: ");
+                        atualizar(scanner.nextLine());
+                        break;
+                    case 4:
+                        System.out.print("ID do Pagamento: ");
+                        deletar(scanner.nextLine());
+                        break;
                     case 0: break;
                     default: System.out.println("Opção inválida.");
                 }
@@ -90,6 +100,44 @@ public class PagamentoView {
         System.out.println("\n--- LISTA DE PAGAMENTOS ---");
         for (Pagamento pag : controller.listarPagamentos()) {
             System.out.println(pag);
+        }
+    }
+
+    public void atualizar(String id) {
+        System.out.println("\n--- ATUALIZAR PAGAMENTO ---");
+        System.out.print("Novo Método de Pagamento: ");
+        String metodo = scanner.nextLine();
+        System.out.print("Está pago? (S/N): ");
+        boolean pago = scanner.nextLine().equalsIgnoreCase("S");
+
+        try {
+            for (Pagamento pag : controller.listarPagamentos()) {
+                if (pag.getId().equals(id)) {
+                    Pagamento pagAtualizado = new Pagamento(id, pag.getInscricao(), pag.getValor(), metodo);
+                    pagAtualizado.setPago(pago);
+                    if (controller.atualizarPagamento(id, pagAtualizado)) {
+                        System.out.println("Pagamento atualizado com sucesso!");
+                    } else {
+                        System.out.println("Falha ao atualizar pagamento.");
+                    }
+                    return;
+                }
+            }
+            System.out.println("Pagamento não encontrado.");
+        } catch (Exception e) {
+            System.out.println("Erro ao atualizar: " + e.getMessage());
+        }
+    }
+
+    public void deletar(String id) {
+        try {
+            if (controller.deletarPagamento(id)) {
+                System.out.println("Pagamento deletado com sucesso!");
+            } else {
+                System.out.println("Pagamento não encontrado.");
+            }
+        } catch (Exception e) {
+            System.out.println("Erro ao deletar: " + e.getMessage());
         }
     }
 }
