@@ -281,21 +281,21 @@ Neste submenu, o foco é o cumprimento do **CRUD 1 (Pessoas)**.
 Neste submenu, o foco é o **CRUD 2 (Eventos e Sessões)**. 
 * **2.1. Cadastrar Categoria:** Define um tema (ex: TI, Design) via `CategoriaController`.
 * **2.2. Cadastrar Local (Físico):** Registra o espaço físico (nome, endereço, acessibilidade).
-* **2.3. Criar Evento:** O sistema pergunta se é "Presencial" ou "Online". Coleta os dados, vincula à Categoria (e ao Local, se físico), e cadastra com status "Agendado".
-* **2.4. Adicionar Sessão a um Evento:** Cria uma palestra/atividade (`Sessao`) e a vincula a um Evento existente.
+* **2.3. Criar Evento:** O sistema exige o ID de um Organizador. Depois, pergunta se é "Presencial" ou "Online". Coleta os dados, vincula à Categoria (e a um objeto `Local` existente, se físico). Se o organizador for Admin, o evento nasce "Aprovado"; senão, nasce "Agendado".
+* **2.4. Adicionar Sessão a um Evento:** Cria uma palestra/atividade (`Sessao`), define um preço para a inscrição e a vincula a um Evento existente.
 * **2.5. Listar Eventos Disponíveis:** Exibe todos os eventos cadastrados.
 
 #### **Opção 3: Financeiro e Inscrições**
 Neste submenu, o foco é o **CRUD 3 (Inscrições/Ingressos)**, fazendo o elo entre Participantes e Eventos/Sessões.
 * **3.1. Realizar Inscrição:** O sistema lista os Participantes e as Sessões. O usuário escolhe os respectivos IDs. O `InscricaoController` cria o registro com status "Pendente".
-* **3.2. Pagar Inscrição / Aplicar Desconto:** O sistema lista as inscrições "Pendentes". O usuário escolhe uma e aciona o `PagamentoController`. O sistema deve perguntar se existe um cupom de desconto (para validar o *Polimorfismo de sobrecarga*). Ao finalizar, muda o status da inscrição para "Confirmada".
-* **3.3. Cancelar Inscrição:** Busca pelo ID da inscrição e altera seu status para "Cancelada", liberando a vaga.
+* **3.2. Pagar Inscrição / Aplicar Desconto:** O sistema pede o ID da Inscrição. O sistema automaticamente resgata o preço da `Sessao` e aciona o `PagamentoController`. O sistema deve perguntar se existe um cupom de desconto (para validar o *Polimorfismo de sobrecarga*). Ao finalizar, muda o status da inscrição para "Confirmada".
+* **3.3. Cancelar Inscrição:** Busca pelo ID da inscrição e altera seu status para "Cancelada", liberando a vaga no EventoPresencial.
 
 #### **Opção 4: Execução do Evento**
 Opções utilizadas durante ou após a ocorrência do evento, acionando interfaces e regras de negócio avançadas.
 * **4.1. Aprovar e Iniciar Evento:** Pede o ID do evento. Chama a lógica do Organizador para "aprovar" e em seguida chama o método abstrato `iniciarEvento()` (que vai se comportar diferente se for Online ou Presencial), mudando o status para "Em andamento".
-* **4.2. Realizar Check-in:** Pede a matrícula do participante. Aciona o contrato da interface `Checkinavel` para validar a presença na sessão inscrita.
-* **4.3. Gerar Certificado:** Pede a matrícula do participante. Valida se o check-in foi realizado e se o evento consta como "Finalizado". Se sim, imprime o diploma na tela e gera o código de autenticidade.
+* **4.2. Realizar Check-in:** Pede o ID do Participante e lista suas inscrições ativas para hoje. O usuário escolhe o ID da Inscrição e aciona o contrato da interface `Checkinavel` para validar a presença na sessão inscrita (`compareceu = true`).
+* **4.3. Gerar Certificado:** Pede o ID do participante e o Evento. Valida se a inscrição correspondente está Paga e se o check-in (`compareceu`) foi realizado. Se sim, imprime o diploma na tela e gera o código de autenticidade.
 * **4.4. Gerar Relatório de Engajamento:** Chama o contrato `gerarRelatorio()` da interface `RelatorioGeravel` do Evento, imprimindo no console um balanço final (ex: total de inscritos, total de comparecimentos).
 
 #### **Opção 0: Salvar e Sair**

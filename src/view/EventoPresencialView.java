@@ -1,9 +1,13 @@
 package view;
 
 import controller.EventoPresencialController;
+import controller.LocalController;
+import controller.OrganizadorController;
 import exceptions.EntidadeNaoEncontradaException;
 import exceptions.EventoLotadoException;
 import model.EventoPresencial;
+import model.Local;
+import model.Organizador;
 
 import java.util.List;
 import java.util.Scanner;
@@ -11,10 +15,14 @@ import java.util.Scanner;
 public class EventoPresencialView {
 
     private final EventoPresencialController controller;
+    private final LocalController localController;
+    private final OrganizadorController organizadorController;
     private final Scanner scanner;
 
-    public EventoPresencialView(EventoPresencialController controller) {
+    public EventoPresencialView(EventoPresencialController controller, LocalController localController, OrganizadorController organizadorController) {
         this.controller = controller;
+        this.localController = localController;
+        this.organizadorController = organizadorController;
         this.scanner = new Scanner(System.in);
     }
 
@@ -51,19 +59,65 @@ public class EventoPresencialView {
 
     private void cadastrar() {
         System.out.println("\n-- Cadastro de Evento Presencial --");
-        System.out.print("ID: ");
+        System.out.print("Digite o seu ID de Organizador: ");
+        String idOrg = scanner.nextLine().trim();
+        
+        Organizador org = null;
+        for (Organizador o : organizadorController.listarOrganizadores()) {
+            if (o.getId().equals(idOrg)) {
+                org = o;
+                break;
+            }
+        }
+        
+        if (org == null) {
+            System.out.println("Erro: Organizador não encontrado. Apenas organizadores podem criar eventos.");
+            return;
+        }
+
+        System.out.print("ID do Evento: ");
         String id = scanner.nextLine().trim();
         System.out.print("Título: ");
         String titulo = scanner.nextLine().trim();
         System.out.print("Data (dd/MM/yyyy): ");
         String data = scanner.nextLine().trim();
-        System.out.print("Local: ");
-        String local = scanner.nextLine().trim();
+        
+        System.out.println("Locais Disponíveis:");
+        List<Local> locais = localController.listarLocais();
+        if (locais.isEmpty()) {
+            System.out.println("Nenhum local cadastrado. Cadastre um local primeiro.");
+            return;
+        }
+        for (Local l : locais) {
+            System.out.println(l);
+        }
+        System.out.print("ID do Local: ");
+        String idLocal = scanner.nextLine().trim();
+        Local local = null;
+        for (Local l : locais) {
+            if (l.getId().equals(idLocal)) {
+                local = l;
+                break;
+            }
+        }
+        
+        if (local == null) {
+            System.out.println("Erro: Local não encontrado.");
+            return;
+        }
+
         System.out.print("Capacidade máxima: ");
 
         try {
             int capacidade = Integer.parseInt(scanner.nextLine().trim());
             EventoPresencial evento = new EventoPresencial(id, titulo, data, local, capacidade);
+            
+            if (org.aprovarEvento(evento)) {
+                System.out.println("Evento aprovado automaticamente pelo Administrador.");
+            } else {
+                System.out.println("Evento criado com status Agendado. Aguardando aprovação de um Administrador para ir ao ar.");
+            }
+            
             controller.cadastrarEvento(evento);
         } catch (NumberFormatException e) {
             System.out.println("Erro: capacidade inválida.");
@@ -87,13 +141,31 @@ public class EventoPresencialView {
         String titulo = scanner.nextLine().trim();
         System.out.print("Nova data (dd/MM/yyyy): ");
         String data = scanner.nextLine().trim();
-        System.out.print("Novo local: ");
-        String local = scanner.nextLine().trim();
+        
+        System.out.println("Locais Disponíveis:");
+        for (Local l : localController.listarLocais()) {
+            System.out.println(l);
+        }
+        System.out.print("ID do novo Local: ");
+        String idLocal = scanner.nextLine().trim();
+        Local local = null;
+        for (Local l : localController.listarLocais()) {
+            if (l.getId().equals(idLocal)) {
+                local = l;
+                break;
+            }
+        }
+        
+        if (local == null) {
+            System.out.println("Erro: Local não encontrado.");
+            return;
+        }
+        
         System.out.print("Nova capacidade máxima: ");
 
         try {
             int capacidade = Integer.parseInt(scanner.nextLine().trim());
-            System.out.print("Novo status (Agendado/Em andamento/Finalizado): ");
+            System.out.print("Novo status (Agendado/Aprovado/Em andamento/Finalizado): ");
             String status = scanner.nextLine().trim();
 
             EventoPresencial atualizado = new EventoPresencial(id, titulo, data, status, local, capacidade, 0);

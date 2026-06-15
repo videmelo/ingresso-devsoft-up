@@ -1,8 +1,10 @@
 package view;
 
 import controller.EventoOnlineController;
+import controller.OrganizadorController;
 import exceptions.EntidadeNaoEncontradaException;
 import model.EventoOnline;
+import model.Organizador;
 
 import java.util.List;
 import java.util.Scanner;
@@ -10,10 +12,12 @@ import java.util.Scanner;
 public class EventoOnlineView {
 
     private final EventoOnlineController controller;
+    private final OrganizadorController organizadorController;
     private final Scanner scanner;
 
-    public EventoOnlineView(EventoOnlineController controller) {
+    public EventoOnlineView(EventoOnlineController controller, OrganizadorController organizadorController) {
         this.controller = controller;
+        this.organizadorController = organizadorController;
         this.scanner = new Scanner(System.in);
     }
 
@@ -52,6 +56,22 @@ public class EventoOnlineView {
 
     private void cadastrar() {
         System.out.println("\n-- Cadastro de Evento Online --");
+        System.out.print("Digite o seu ID de Organizador: ");
+        String idOrg = scanner.nextLine().trim();
+        
+        Organizador org = null;
+        for (Organizador o : organizadorController.listarOrganizadores()) {
+            if (o.getId().equals(idOrg)) {
+                org = o;
+                break;
+            }
+        }
+        
+        if (org == null) {
+            System.out.println("Erro: Organizador não encontrado. Apenas organizadores podem criar eventos.");
+            return;
+        }
+
         System.out.print("ID: ");
         String id = scanner.nextLine().trim();
         System.out.print("Título: ");
@@ -64,6 +84,13 @@ public class EventoOnlineView {
         String link = scanner.nextLine().trim();
 
         EventoOnline evento = new EventoOnline(id, titulo, data, link, plataforma);
+        
+        if (org.aprovarEvento(evento)) {
+            System.out.println("Evento aprovado automaticamente pelo Administrador.");
+        } else {
+            System.out.println("Evento criado com status Agendado. Aguardando aprovação de um Administrador para ir ao ar.");
+        }
+        
         controller.cadastrarEvento(evento);
     }
 

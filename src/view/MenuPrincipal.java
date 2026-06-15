@@ -49,8 +49,8 @@ public class MenuPrincipal {
         this.pagamentoController = pagamentoController;
         this.certificadoController = certificadoController;
 
-        this.eventoPresencialView = new EventoPresencialView(this.eventoPresencialController);
-        this.eventoOnlineView = new EventoOnlineView(this.eventoOnlineController);
+        this.eventoPresencialView = new EventoPresencialView(this.eventoPresencialController, this.localController, this.organizadorController);
+        this.eventoOnlineView = new EventoOnlineView(this.eventoOnlineController, this.organizadorController);
         this.organizadorView = new OrganizadorView(this.organizadorController);
         this.participanteView = new ParticipanteView(this.participanteController);
         this.localView = new LocalView(this.localController);
@@ -266,17 +266,52 @@ public class MenuPrincipal {
     private void realizarCheckin() {
         System.out.print("ID do Participante para Check-in: ");
         String idP = scanner.nextLine();
+        model.Participante participante = null;
         for (model.Participante p : participanteController.listarParticipantes()) {
             if (p.getId().equals(idP)) {
-                if (p.realizarCheckin()) {
-                    System.out.println("Check-in realizado com sucesso!");
+                participante = p;
+                break;
+            }
+        }
+        
+        if (participante == null) {
+            System.out.println("Participante não encontrado.");
+            return;
+        }
+
+        System.out.println("Inscrições Confirmadas para hoje:");
+        String dataAtual = java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        boolean temInscricao = false;
+        
+        for (model.Inscricao insc : inscricaoController.listarInscricoes()) {
+            if (insc.getParticipante().getId().equals(participante.getId()) && "Confirmada".equalsIgnoreCase(insc.getStatus())) {
+                if (insc.getSessao() != null && insc.getSessao().getEventoVinculado() != null) {
+                    if (dataAtual.equals(insc.getSessao().getEventoVinculado().getData())) {
+                        System.out.println(insc);
+                        temInscricao = true;
+                    }
+                }
+            }
+        }
+
+        if (!temInscricao) {
+            System.out.println("Nenhuma inscrição confirmada para hoje.");
+            return;
+        }
+
+        System.out.print("Digite o ID da Inscrição para fazer Check-in: ");
+        String idInscricao = scanner.nextLine();
+        for (model.Inscricao insc : inscricaoController.listarInscricoes()) {
+            if (insc.getId().equals(idInscricao) && insc.getParticipante().getId().equals(participante.getId())) {
+                if (insc.realizarCheckin()) {
+                    System.out.println("Check-in realizado com sucesso na inscrição " + idInscricao + "!");
                 } else {
-                    System.out.println("Falha no Check-in. Verifique as inscrições.");
+                    System.out.println("Falha no Check-in. Verifique a data do evento.");
                 }
                 return;
             }
         }
-        System.out.println("Participante não encontrado.");
+        System.out.println("Inscrição não encontrada ou não pertence a este participante.");
     }
 
     private void gerarRelatorios() {

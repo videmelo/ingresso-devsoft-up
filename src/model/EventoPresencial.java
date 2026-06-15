@@ -4,29 +4,29 @@ import exceptions.EventoLotadoException;
 
 public class EventoPresencial extends Evento {
 
-    private String local;
+    private Local local;
     private int capacidadeMaxima;
     private int totalInscritos;
 
-    public EventoPresencial(String id, String titulo, String data, String local, int capacidadeMaxima) {
+    public EventoPresencial(String id, String titulo, String data, Local local, int capacidadeMaxima) {
         super(id, titulo, data, "Agendado");
         this.local = local;
         this.capacidadeMaxima = capacidadeMaxima;
         this.totalInscritos = 0;
     }
 
-    public EventoPresencial(String id, String titulo, String data, String status, String local, int capacidadeMaxima, int totalInscritos) {
+    public EventoPresencial(String id, String titulo, String data, String status, Local local, int capacidadeMaxima, int totalInscritos) {
         super(id, titulo, data, status);
         this.local = local;
         this.capacidadeMaxima = capacidadeMaxima;
         this.totalInscritos = totalInscritos;
     }
 
-    public String getLocal() {
+    public Local getLocal() {
         return local;
     }
 
-    public void setLocal(String local) {
+    public void setLocal(Local local) {
         this.local = local;
     }
 
@@ -52,7 +52,7 @@ public class EventoPresencial extends Evento {
         System.out.println("===========================================");
         System.out.println("  EVENTO PRESENCIAL INICIADO!");
         System.out.println("  Título : " + getTitulo());
-        System.out.println("  Local  : " + local);
+        System.out.println("  Local  : " + (local != null ? local.getNome() : "Não definido"));
         System.out.println("  Data   : " + getData());
         System.out.println("  Abrindo as portas para o público...");
         System.out.println("===========================================");
@@ -86,7 +86,7 @@ public class EventoPresencial extends Evento {
     public void gerarRelatorio() {
         super.gerarRelatorio();
         System.out.println("  Tipo         : Presencial");
-        System.out.println("  Local        : " + local);
+        System.out.println("  Local        : " + (local != null ? local.getNome() : "Não definido"));
         System.out.println("  Capacidade   : " + capacidadeMaxima);
         System.out.println("  Inscritos    : " + totalInscritos);
         System.out.println("  Vagas livres : " + getVagasRestantes());
@@ -99,7 +99,7 @@ public class EventoPresencial extends Evento {
                " | Título: " + getTitulo() +
                " | Data: " + getData() +
                " | Status: " + getStatus() +
-               " | Local: " + local +
+               " | Local: " + (local != null ? local.getNome() : "Não definido") +
                " | Vagas: " + getVagasRestantes() + "/" + capacidadeMaxima;
     }
 }

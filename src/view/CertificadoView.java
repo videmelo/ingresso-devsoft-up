@@ -85,13 +85,15 @@ public class CertificadoView {
         }
 
         if (participante != null && evento != null) {
-            // Validação de Pagamento
+            // Validação de Pagamento e Check-in
             boolean pago = false;
+            boolean compareceu = false;
             for (Inscricao insc : iController.listarInscricoes()) {
                 if (insc.getParticipante().getId().equals(participante.getId()) && 
                     insc.getSessao().getEventoVinculado().getId().equals(evento.getId())) {
                     if (insc.getStatus().equals("Confirmada")) {
                         pago = true;
+                        compareceu = insc.isCompareceu();
                         break;
                     }
                 }
@@ -102,7 +104,7 @@ public class CertificadoView {
                 return;
             }
 
-            if (!participante.isPresente()) {
+            if (!compareceu) {
                 System.out.println("Erro: O participante não realizou o check-in e está ausente.");
                 return;
             }

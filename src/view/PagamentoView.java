@@ -60,14 +60,14 @@ public class PagamentoView {
         }
 
         if (inscricao != null) {
-            System.out.print("Valor: ");
-            double valor = Double.parseDouble(scanner.nextLine());
+            double valorCobrado = inscricao.getSessao().getPreco();
+            System.out.println("Valor a ser pago: R$ " + valorCobrado);
             System.out.print("Método de Pagamento: ");
             String metodo = scanner.nextLine();
             System.out.print("Cupom de Desconto (Pressione ENTER se não houver): ");
             String cupom = scanner.nextLine();
 
-            Pagamento pag = new Pagamento(id, inscricao, valor, metodo);
+            Pagamento pag = new Pagamento(id, inscricao, valorCobrado, metodo);
             boolean sucesso;
             if (cupom.isEmpty()) {
                 sucesso = pag.processarPagamento();
@@ -77,7 +77,7 @@ public class PagamentoView {
 
             if (sucesso) {
                 controller.cadastrarPagamento(pag);
-                System.out.println("Pagamento processado com sucesso! Valor final: " + pag.getValor());
+                System.out.println("Pagamento processado com sucesso! Valor final com descontos: R$ " + pag.getValor());
             } else {
                 System.out.println("Erro ao processar pagamento. Verifique o valor.");
             }

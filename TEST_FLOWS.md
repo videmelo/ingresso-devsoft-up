@@ -6,33 +6,36 @@ Este documento descreve 3 fluxos principais para validar a integracao de todos o
 Objetivo: Validar o elo entre Participante, Sessao, Pagamento e Emissao de Certificado.
 
 1. Gerenciar Pessoas: Cadastrar um novo Participante (ID: P1).
-2. Gerenciar Eventos e Estrutura:
+2. Gerenciar Pessoas: Cadastrar um Organizador Admin (ID: O1).
+3. Gerenciar Eventos e Estrutura:
    - Cadastrar uma Categoria (ID: C1).
-   - Cadastrar um Evento Online (ID: E1).
-   - Cadastrar uma Sessao (ID: S1) vinculada ao Evento E1.
-3. Financeiro e Inscricoes:
+   - Cadastrar um Evento Online (ID: E1), inserindo o ID do Organizador O1 para aprovação.
+   - Cadastrar uma Sessao (ID: S1) vinculada ao Evento E1 e definir o preço da inscrição (ex: 100.0).
+4. Financeiro e Inscricoes:
    - Realizar Inscricao do Participante P1 na Sessao S1 (ID da Inscricao: I1). O status sera "Pendente".
-   - Gerenciar Pagamentos: Processar Pagamento para a Inscricao I1. Aplicar cupom "DESCONTO10".
+   - Gerenciar Pagamentos: Processar Pagamento para a Inscricao I1. O sistema deve cobrar 100.0 automaticamente. Aplicar cupom "DESCONTO10".
    - Verificar se o status da Inscricao I1 mudou para "Confirmada".
-4. Execucao do Evento:
-   - Realizar Check-in para o Participante P1.
+5. Execucao do Evento:
+   - Realizar Check-in para a Inscrição I1 do Participante P1.
+   - Aprovar e Iniciar Evento E1 (via Menu Execução ou automatico).
    - Gerenciar Certificados: Emitir Certificado para o Participante P1 no Evento E1.
    - Validar se o certificado e exibido com o codigo de autenticidade.
 
 ## Fluxo 2: Gestao de Evento Presencial e Lotacao
 Objetivo: Validar a alocacao de locais fisicos e a trava de seguranca de capacidade maxima.
 
-1. Gerenciar Eventos e Estrutura:
-   - Cadastrar um Local (ID: L1) com capacidade maxima de 2 pessoas.
-   - Cadastrar um Evento Presencial (ID: E2) vinculado ao Local L1, definindo a capacidade como 2.
-   - Cadastrar uma Sessao (ID: S2) vinculada ao Evento E2.
-2. Gerenciar Pessoas: Cadastrar 3 Participantes diferentes (P1, P2 e P3).
-3. Financeiro e Inscricoes:
+1. Gerenciar Pessoas: Cadastrar um Organizador Admin (ID: O2).
+2. Gerenciar Eventos e Estrutura:
+   - Cadastrar um Local Físico (ID: L1).
+   - Cadastrar um Evento Presencial (ID: E2), fornecendo o Organizador O2, selecionando o Local L1, e definindo a capacidade como 2.
+   - Cadastrar uma Sessao (ID: S2) vinculada ao Evento E2 (Definir preço 0).
+3. Gerenciar Pessoas: Cadastrar 3 Participantes diferentes (P1, P2 e P3).
+4. Financeiro e Inscricoes:
    - Realizar Inscricao do Participante P1 na Sessao S2. (Sucesso)
    - Realizar Inscricao do Participante P2 na Sessao S2. (Sucesso)
    - Realizar Inscricao do Participante P3 na Sessao S2.
    - Validar se o sistema lanca o erro "Evento lotado" ou impede a terceira inscricao.
-4. Execucao do Evento:
+5. Execucao do Evento:
    - Gerar Relatorios e verificar se a contagem de inscritos para o Evento E2 e igual a 2.
 
 ## Fluxo 3: Administracao e Manutencao

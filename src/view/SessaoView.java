@@ -62,6 +62,13 @@ public class SessaoView {
         String horario = scanner.nextLine();
         System.out.print("Palestrante: ");
         String palestrante = scanner.nextLine();
+        System.out.print("Preço da Inscrição (R$): ");
+        double preco = 0.0;
+        try {
+            preco = Double.parseDouble(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Erro: Preço inválido. O valor será setado como 0.0");
+        }
 
         System.out.println("Vincular a um Evento:");
         System.out.println("1. Evento Online");
@@ -90,7 +97,7 @@ public class SessaoView {
         }
 
         if (evento != null) {
-            Sessao sessao = new Sessao(id, tema, horario, palestrante, evento);
+            Sessao sessao = new Sessao(id, tema, horario, palestrante, evento, preco);
             controller.cadastrarSessao(sessao);
             System.out.println("Sessão cadastrada com sucesso!");
         } else {
