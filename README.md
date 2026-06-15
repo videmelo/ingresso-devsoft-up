@@ -32,7 +32,7 @@ O sistema foi estruturado seguindo o padrao MVC, garantindo a separacao de respo
 
 ## Tecnologias Utilizadas
 
-* Linguagem: Java 17+
+* Linguagem: Java 19
 * Persistencia: Serializacao de objetos Java (java.io.Serializable) em arquivos .dat.
 * Logs: FileWriter e PrintWriter para registro em tempo real.
 * Interface: CLI (Command Line Interface).
@@ -54,12 +54,37 @@ logs/              # Arquivo log.txt
 
 ## Como Executar
 
-1. Certifique-se de ter o JDK 17 ou superior instalado em sua maquina.
+1. Certifique-se de ter o JDK 19 ou superior instalado em sua maquina.
 2. Clone o repositorio.
 3. Compile os arquivos Java a partir da pasta src:
    javac src/**/*.java -d out
 4. Execute a classe principal:
    java -cp out Main
+
+## Relações entre Classes (Agregação, Composição e Associação)
+
+O sistema foi modelado para refletir o mundo real utilizando os seguintes conceitos de relacionamento entre as classes:
+
+*   **Associação:** Ocorre entre `Sessao` e `EventoVinculado` (uma sessão pertence a um evento, mas ambas existem independentemente) e entre `Certificado` e `Participante` (o certificado é emitido para um participante).
+*   **Agregação:** Demonstrada na relação entre `Participante` e a sua lista de `Inscricao` (`List<Inscricao> historicoInscricoes`). O participante existe independentemente de suas inscrições, mas as inscrições são agrupadas a ele.
+*   **Composição:** Pode ser observada de forma indireta na relação de persistência dos arquivos de configuração e logs gerados pelo `LogUtil`, onde a vida útil desses registros está intrinsecamente ligada à execução e existência do sistema principal. (Pode-se também citar que ao deletar um `Evento`, as `Sessões` atreladas a ele deveriam logicamente deixar de existir na regra de negócios).
+
+## Uso do ChatGPT (Inteligência Artificial)
+
+Durante o desenvolvimento deste projeto, o ChatGPT foi utilizado de forma pontual como uma ferramenta de apoio e aprendizado complementar. Suas principais aplicações foram:
+
+*   **Esclarecimento de Dúvidas:** Entender as diferenças práticas entre métodos abstratos e interfaces no Java 19.
+*   **Organização e Planejamento:** A IA foi fundamental para a criação dos arquivos de documentação inicial (`ADR.md` e `DEVLOG.md`), auxiliando na definição da arquitetura do projeto e na divisão equilibrada das tarefas e módulos entre os desenvolvedores da equipe.
+*   **Refatoração (Clean Code):** Dicas de como manter os *Controllers* enxutos e delegar as responsabilidades de negócio para a camada de *Model*.
+*   **Geração de Dados Fictícios e Test Flows:** Criação de mocks, dados de testes iniciais e criação dos fluxos de testes (*test flows*) para validar o sistema e cobrir os principais cenários de uso sem a necessidade de testes ou digitação manual exaustiva.
+A IA não foi utilizada para escrever a estrutura core do sistema, mantendo a autenticidade e o processo de aprendizado prático da equipe de desenvolvimento.
+
+## Referências e Recursos
+
+*   **Documentação Oficial:** [Java SE 19 Documentation](https://docs.oracle.com/en/java/javase/19/)
+*   **Apostilas e Aulas:** Materiais disponibilizados durante as aulas de Desenvolvimento de Software (Universidade Positivo - 2026).
+*   **Artigos sobre Padrões de Projeto:** Guias do portal *Baeldung* e *Alura* sobre arquitetura MVC em aplicações Console.
+*   **Ferramentas:** IntelliJ IDEA, Git, GitHub.
 
 ## Equipe de Desenvolvimento
 
